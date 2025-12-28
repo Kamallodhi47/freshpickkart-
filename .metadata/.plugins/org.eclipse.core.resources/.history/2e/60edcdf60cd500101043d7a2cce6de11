@@ -1,0 +1,842 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> Apna Shop - Premium Shopping Experience</title>
+
+<!-- Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ---------------- GLOBAL STYLES ---------------- */
+:root {
+    --primary: #4a6cf7;
+    --secondary: #6c63ff;
+    --accent: #ff6b8b;
+    --success: #28a745;
+    --warning: #ffcf2b;
+    --dark: #2a2d3b;
+    --light: #f8fafc;
+    --text: #64748b;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(135deg, #f8fafc 0%, #e4edf5 100%);
+    font-family: 'Poppins', sans-serif;
+    color: var(--dark);
+    min-height: 100vh;
+    padding-top: 70px; /* For fixed header */
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+}
+
+/* Force dark text colors for dark mode compatibility */
+.text-dark {
+    color: #2a2d3b !important;
+}
+
+.text-danger {
+    color: #dc3545 !important;
+}
+
+.text-success {
+    color: #28a745 !important;
+}
+
+.text-muted {
+    color: #6c757d !important;
+}
+
+/* ---------------- HERO SECTION ---------------- */
+.fresh-hero {
+    height: 580px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0 0 40px 40px;
+    margin-bottom: 40px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+.fresh-slider {
+    position: absolute;
+    width: 500%;
+    height: 100%;
+    display: flex;
+    animation: scrollSlider 45s linear infinite;
+}
+
+.slide { 
+    width: 20%; 
+    height: 100%; 
+    position: relative;
+}
+
+.slide img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    filter: brightness(0.6);
+}
+
+.fresh-content {
+    position: absolute;
+    text-align: center;
+    color: white;
+    padding: 40px 50px;
+    border-radius: 24px;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 10;
+    max-width: 800px;
+    animation: fadeIn 1.4s ease;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+}
+
+.fresh-content h1 { 
+    font-size: 3.8rem; 
+    font-weight: 800; 
+    margin-bottom: 15px;
+    text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    color: white !important;
+}
+
+.fresh-content p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    opacity: 0.9;
+    color: white !important;
+}
+
+.fresh-btn { 
+    padding: 16px 40px; 
+    background: linear-gradient(135deg, var(--warning) 0%, #ffa726 100%); 
+    font-weight: 700; 
+    border-radius: 12px; 
+    color: #111 !important; 
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+    border: none;
+    font-size: 1.1rem;
+    box-shadow: 0 10px 25px rgba(255, 207, 43, 0.4);
+    letter-spacing: 0.5px;
+}
+
+.fresh-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(255, 207, 43, 0.6);
+    color: #111 !important;
+}
+
+@keyframes scrollSlider {
+    0% { transform: translateX(0); }
+    20% { transform: translateX(-20%); }
+    40% { transform: translateX(-40%); }
+    60% { transform: translateX(-60%); }
+    80% { transform: translateX(-80%); }
+    100% { transform: translateX(0); }
+}
+
+@keyframes fadeIn { 
+    from { opacity: 0; transform: translateY(25px) scale(0.95); } 
+    to { opacity: 1; transform: translateY(0) scale(1); } 
+}
+
+/* ---------------- MAIN CONTAINER ---------------- */
+.main-container {
+    width: 100%;
+    max-width: 1800px;
+    min-height: 1000px;
+    margin: 50px auto;
+    padding: 70px 60px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 36px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    position: relative;
+    overflow: hidden;
+}
+
+.main-container::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(74, 108, 247, 0.05) 0%, transparent 70%);
+    z-index: -1;
+}
+
+/* SECTION TITLE */
+.bg-section {
+    margin-bottom: 60px;
+}
+
+.section-title {
+    text-align: center;
+    font-weight: 800;
+    color: var(--dark);
+    margin-bottom: 35px;
+    position: relative;
+    font-size: 2.2rem;
+    padding-bottom: 15px;
+}
+
+.section-title::after {
+    content: '';
+    width: 80px;
+    height: 5px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 5px;
+    box-shadow: 0 5px 15px rgba(74, 108, 247, 0.4);
+}
+
+/* ---------------- HORIZONTAL SCROLL OFFERS ---------------- */
+.offer-row {
+    display: flex;
+    gap: 30px;
+    overflow-x: auto;
+    padding: 25px 20px;
+    scroll-behavior: smooth;
+    margin: 0 -10px;
+    width: calc(100% + 20px);
+}
+
+.offer-row::-webkit-scrollbar {
+    height: 10px;
+}
+
+.offer-row::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    border-radius: 10px;
+    box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+.offer-row::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+    margin: 0 20px;
+}
+
+/* ---------------- CARD STYLES ---------------- */
+.offer-card, .category-card, .product-card {
+    background: white;
+    border-radius: 20px;
+    padding: 25px 20px;
+    text-align: center;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    min-width: 280px;
+    flex-shrink: 0;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.offer-card:hover, .category-card:hover, .product-card:hover {
+    transform: translateY(-15px);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+}
+
+.offer-card::before, .category-card::before, .product-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+}
+
+/* IMAGES */
+.offer-img { 
+    height: 160px; 
+    width: 100%; 
+    object-fit: contain;
+    margin-bottom: 20px;
+    transition: transform 0.5s ease;
+}
+
+.category-img { 
+    height: 140px; 
+    width: 100%; 
+    object-fit: contain;
+    margin-bottom: 20px;
+    transition: transform 0.5s ease;
+}
+
+.product-img { 
+    height: 200px; 
+    width: 100%; 
+    object-fit: contain;
+    margin-bottom: 20px;
+    transition: transform 0.5s ease;
+}
+
+.offer-card:hover .offer-img,
+.category-card:hover .category-img,
+.product-card:hover .product-img {
+    transform: scale(1.08);
+}
+
+/* DISCOUNT BADGE */
+.discount-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: linear-gradient(135deg, var(--accent) 0%, #ff8a9e 100%);
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 8px 16px;
+    border-radius: 20px;
+    z-index: 2;
+    box-shadow: 0 8px 20px rgba(255, 107, 139, 0.4);
+    letter-spacing: 0.5px;
+}
+
+/* CARD CONTENT - FIX FOR DARK MODE */
+.offer-card p.mt-2.fw-bold,
+.category-card p.mt-2.fw-bold,
+.product-card p.mt-2.fw-bold {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #2a2d3b !important;
+    margin: 15px 0;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.4;
+}
+
+.offer-card div,
+.product-card div.mb-2 {
+    margin: 15px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* Fix price colors for dark mode */
+.text-danger.fw-bold {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #dc3545 !important;
+}
+
+.text-decoration-line-through.text-muted.ms-1 {
+    font-size: 1.1rem;
+    color: #6c757d !important;
+    opacity: 0.7;
+}
+
+.text-success.ms-1.fw-bold {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #28a745 !important;
+    background: rgba(40, 167, 69, 0.1);
+    padding: 5px 12px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+}
+
+/* ADD BUTTON */
+.btn-addcart {
+    padding: 12px 30px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    border: none;
+    color: white !important;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    box-shadow: 0 10px 25px rgba(74, 108, 247, 0.3);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 15px;
+    letter-spacing: 0.5px;
+    width: 100%;
+    cursor: pointer;
+}
+
+.btn-addcart:hover { 
+    background: linear-gradient(135deg, #3a5ce5 0%, #5b52e6 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(74, 108, 247, 0.4);
+    color: white !important;
+}
+
+/* QUANTITY SELECTOR */
+.qty-selector {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin: 20px 0 15px;
+}
+
+.qty-selector button {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+    border-radius: 50%;
+    border: 2px solid #e2e8f0;
+    background: white;
+    color: var(--dark);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.qty-selector button:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    transform: scale(1.1);
+}
+
+.qty-selector input {
+    width: 60px;
+    text-align: center;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 8px 5px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--dark);
+    background: white;
+    transition: all 0.3s ease;
+}
+
+.qty-selector input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.1);
+    outline: none;
+}
+
+/* CATEGORIES GRID */
+.row.g-4 {
+    margin: 0 -15px;
+    width: calc(100% + 30px);
+}
+
+.col-6.col-md-4.col-lg-2 {
+    padding: 15px;
+}
+
+.category-card {
+    height: 100%;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.category-card a.text-dark.text-decoration-none {
+    color: #2a2d3b !important;
+    font-size: 1.1rem;
+    transition: color 0.3s ease;
+    text-decoration: none !important;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.category-card a.text-dark.text-decoration-none:hover {
+    color: var(--primary) !important;
+}
+
+/* PRODUCT LINK */
+.product-card a.text-dark.text-decoration-none {
+    color: #2a2d3b !important;
+    text-decoration: none !important;
+    transition: color 0.3s ease;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.product-card a.text-dark.text-decoration-none:hover {
+    color: var(--primary) !important;
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 1200px) {
+    .main-container {
+        padding: 40px;
+        margin: 30px 20px;
+    }
+    
+    .fresh-content h1 {
+        font-size: 3rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-container {
+        padding: 30px 20px;
+        margin: 20px 10px;
+        border-radius: 24px;
+    }
+    
+    .fresh-hero {
+        height: 450px;
+        border-radius: 0 0 30px 30px;
+    }
+    
+    .fresh-content {
+        padding: 25px 30px;
+        margin: 0 20px;
+    }
+    
+    .fresh-content h1 {
+        font-size: 2.2rem;
+    }
+    
+    .fresh-content p {
+        font-size: 1rem;
+    }
+    
+    .section-title {
+        font-size: 1.8rem;
+    }
+    
+    .offer-card, .category-card, .product-card {
+        min-width: 250px;
+        padding: 20px 15px;
+    }
+}
+
+@media (max-width: 576px) {
+    .fresh-hero {
+        height: 400px;
+    }
+    
+    .fresh-content h1 {
+        font-size: 1.8rem;
+    }
+    
+    .fresh-btn {
+        padding: 14px 30px;
+        font-size: 1rem;
+    }
+    
+    .section-title {
+        font-size: 1.6rem;
+    }
+    
+    .col-6.col-md-4.col-lg-2 {
+        width: 50%;
+        max-width: 50%;
+    }
+}
+
+/* ANIMATIONS */
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.floating {
+    animation: float 3s ease-in-out infinite;
+}
+
+/* SCROLL HINT */
+.scroll-hint {
+    text-align: center;
+    color: var(--text);
+    font-size: 0.9rem;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.scroll-hint i {
+    color: var(--primary);
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {transform: translateX(0);}
+    40% {transform: translateX(-10px);}
+    60% {transform: translateX(-5px);}
+}
+</style>
+</head>
+
+<body>
+<%@ include file="header1.jsp" %>
+
+<!-- ===================== HERO SECTION ===================== -->
+<section class="fresh-hero">
+    <div class="fresh-slider">
+        <div class="slide"><img src="${pageContext.request.contextPath}/assets/kisan.jpg" alt="Fresh Produce"></div>
+        <div class="slide"><img src="${pageContext.request.contextPath}/assets/kkkk.jpeg" alt="Quality Food"></div>
+        <div class="slide"><img src="${pageContext.request.contextPath}/assets/kisan.jpg" alt="Farm Fresh"></div>
+        <div class="slide"><img src="${pageContext.request.contextPath}/assets/beg.jpeg" alt="Fresh Vegetables"></div>
+        <div class="slide"><img src="${pageContext.request.contextPath}/assets/vegi.jpg" alt="Healthy Living"></div>
+    </div>
+    <div class="fresh-content">
+        <h1>FreshMart – Freshness Delivered</h1>
+        <p>Vegetables, fruits, dairy, snacks & more with premium quality.</p>
+        <a href="#" class="fresh-btn">Shop Now</a>
+    </div>
+</section>
+
+<div class="main-container">
+    <!-- ===================== OFFERS ===================== -->
+    <div class="bg-section">
+        <h2 class="section-title">Top Offers</h2>
+        <div class="offer-row">
+            <c:forEach var="o" items="${offerProducts}">
+                <div class="offer-card">
+                    <c:set var="discountPercent" value="${((o.price - o.discountPrice) / o.price) * 100}" />
+                    <c:set var="discountInt" value="${fn:substringBefore(discountPercent, '.')}" />
+                    <span class="discount-badge">${discountInt}% OFF</span>
+
+                    <img src="${pageContext.request.contextPath}/assets/img/product_img/${o.image}" class="offer-img" alt="${o.title}">
+                    <p class="mt-2 fw-bold">${o.title}</p>
+                    <div>
+                        <span class="text-danger fw-bold">₹${o.discountPrice}</span>
+                        <span class="text-decoration-line-through text-muted ms-1">₹${o.price}</span>
+                        <span class="text-success ms-1 fw-bold">${discountInt}% OFF</span>
+                    </div>
+                   
+                    <button class="btn-addcart mt-2" onclick="addToCart(${o.id}, 1)">Add to Cart</button>
+                </div>
+            </c:forEach>
+        </div>
+    </div>
+
+    <!-- ===================== CATEGORIES ===================== -->
+    <div class="bg-section">
+        <h2 class="section-title">Shop by Category</h2>
+        <div class="row g-4">
+            <c:forEach var="c" items="${categories}">
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="category-card">
+                        <img src="${pageContext.request.contextPath}/assets/img/category_img/${c.imageName}" class="category-img" alt="${c.name}">
+                        <p class="mt-2 fw-bold">
+                            <a href="products?categories=${c.name}" class="text-dark text-decoration-none">${c.name}</a>
+                        </p>
+                    </div>
+                </div>
+            </c:forEach>
+        </div>
+    </div>
+
+    <!-- ===================== LATEST PRODUCTS ===================== -->
+    <div class="bg-section">
+        <h2 class="section-title">Latest Products</h2>
+        <div class="offer-row">
+            <c:forEach var="p" items="${products}">
+                <div class="product-card">
+                    <span class="discount-badge">${p.discount}% OFF</span>
+                    <img src="${pageContext.request.contextPath}/assets/img/product_img/${p.image}" class="product-img" alt="${p.title}">
+                    <p class="mt-2 fw-bold">
+                        <a href="${pageContext.request.contextPath}/products?id=${p.id}" class="text-dark text-decoration-none">${p.title}</a>
+                    </p>
+                    <div class="mb-2">
+                        <span class="text-danger fw-bold">₹${p.discountPrice}</span>
+                        <span class="text-decoration-line-through text-muted ms-1">₹${p.price}</span>
+                        <span class="text-success ms-1 fw-bold">${p.discount}% OFF</span>
+                    </div>
+                    <!-- Quantity selector -->
+                    <div class="qty-selector">
+                        <button type="button" onclick="changeQty(this.nextElementSibling, -1)">-</button>
+                        <input type="text" value="1" id="qty-${p.id}">
+                        <button type="button" onclick="changeQty(this.previousElementSibling, 1)">+</button>
+                    </div>
+                  <button class="btn-addcart mt-2" 
+        onclick="addToCart(event, ${p.id}, document.getElementById('qty-${p.id}').value)">
+    Add to Cart
+</button>
+</div>
+</c:forEach>
+</div>
+</div>
+</div>
+
+<%@ include file="Footar.jsp" %>
+
+<script>
+
+function addToCart(event, productId, quantity) {
+
+    fetch('<%=request.getContextPath()%>/cart/add', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            productId: productId,
+            quantity: quantity
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+
+        if (data.success) {
+
+            // ✔ Button animation
+            const button = event.target;
+            const originalText = button.innerHTML;
+            const originalBg = button.style.background;
+
+            button.innerHTML = '<i class="fas fa-check"></i> Added!';
+            button.style.background = 'linear-gradient(135deg, #28a745 0%, #20c997 100%)';
+            button.style.transform = 'scale(0.95)';
+
+            // ✔ Ripple effect
+            const ripple = document.createElement('span');
+            ripple.style.cssText = `
+                position: absolute;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.6);
+                transform: scale(0);
+                animation: ripple 0.6s linear;
+                pointer-events: none;
+            `;
+
+            const rect = button.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = event.clientX - rect.left - size / 2;
+            const y = event.clientY - rect.top - size / 2;
+
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+
+            button.style.position = 'relative';
+            button.style.overflow = 'hidden';
+            button.appendChild(ripple);
+
+            // Ripple CSS
+            if (!document.querySelector('#ripple-style')) {
+                const style = document.createElement('style');
+                style.id = 'ripple-style';
+                style.textContent = `
+                    @keyframes ripple {
+                        to {
+                            transform: scale(4);
+                            opacity: 0;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            // Reset button after animation
+            setTimeout(() => {
+                button.innerHTML = originalText;
+                button.style.background = originalBg;
+                button.style.transform = '';
+                if (ripple.parentNode === button) {
+                    button.removeChild(ripple);
+                }
+            }, 1500);
+
+            // ✔ Cart count update
+            if (data.cartCount) {
+                updateCartCount(data.cartCount);
+            }
+
+        } else {
+            alert('Error adding product to cart');
+        }
+
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("Error adding product to cart");
+    });
+}
+
+
+// ✔ Quantity change
+function changeQty(input, delta) {
+    let val = parseInt(input.value);
+    val += delta;
+    if (val < 1) val = 1;
+    if (val > 99) val = 99;
+    input.value = val;
+}
+
+
+// ✔ Cart count update
+function updateCartCount(count) {
+    const cartCountEl = document.querySelector('.cart-count');
+    if (cartCountEl) {
+        cartCountEl.textContent = count;
+    }
+}
+
+
+// ✔ Card hover effect + scroll hint
+document.addEventListener('DOMContentLoaded', function () {
+    const cards = document.querySelectorAll('.offer-card, .category-card, .product-card');
+    cards.forEach(card => {
+        card.addEventListener('mouseenter', function () {
+            this.style.zIndex = '10';
+        });
+
+        card.addEventListener('mouseleave', function () {
+            this.style.zIndex = '0';
+        });
+    });
+
+    const offerRows = document.querySelectorAll('.offer-row');
+    offerRows.forEach(row => {
+        const hint = document.createElement('div');
+        hint.className = 'scroll-hint';
+        hint.innerHTML = '<i class="fas fa-arrow-left"></i> Scroll for more products <i class="fas fa-arrow-right"></i>';
+        row.parentNode.insertBefore(hint, row.nextSibling);
+    });
+});
+
+</script>
+
+
+
+    
+</body>
+</html>

@@ -1,0 +1,372 @@
+package com.univ.controller;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.List;
+
+import com.univ.entity.Product;
+import com.univ.entity.Category;
+import com.univ.service.Categoryservice;
+import com.univ.service.Productservice;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+import jakarta.servlet.http.HttpSession;
+
+@Controller
+public class IndexController {
+
+    @Autowired
+    private Categoryservice categoryservice;
+    @Autowired
+    private Productservice productservice;
+
+    // Home
+    @GetMapping("/")
+    public String index(Model model) {
+        return "index";
+    }
+   
+    // Category listing with pagination
+    @GetMapping("/category")
+    public String categoryPage(Model model,
+                               @RequestParam(name = "pageNo", defaultValue = "0") Integer pageNo,
+                               @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+
+        Page<Category> page = categoryservice.getAllCategorPagination(pageNo, pageSize);
+        List<Category> categories = page.getContent();
+
+        model.addAttribute("categories", categories);
+        model.addAttribute("pageNo", page.getNumber());
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("totalElements", page.getTotalElements());
+
+        return "category";
+    }
+
+    // Save category
+	/*
+	 * @PostMapping("/saveCategory") public String saveCategory(@ModelAttribute
+	 * Category category, @RequestParam("file") MultipartFile file, HttpSession
+	 * session) throws IOException {
+	 * 
+	 * 
+	 * 
+	 * 
+	 * String imageName = file != null && !file.isEmpty() ?
+	 * file.getOriginalFilename() : "default.jpg"; category.setImageName(imageName);
+	 * 
+	 * Boolean existCategory = categoryservice.existCategory(category.getName());
+	 * 
+	 * if (existCategory) { session.setAttribute("errorMsg",
+	 * "Category Name already exists"); return "redirect:/category"; }
+	 * 
+	 * Category saveCategory = categoryservice.saveCategory(category);
+	 * 
+	 * if (ObjectUtils.isEmpty(saveCategory)) { session.setAttribute("errorMsg",
+	 * "Not saved ! internal server error"); return "redirect:/category"; }
+	 * 
+	 * if (file != null && !file.isEmpty()) { String adminDir =
+	 * "C:\\maltiWenderWeb\\Admin (5)\\Admin\\src\\main\\webapp\\assets\\img\\category_img"
+	 * ; String userDir =
+	 * "C:\\maltiWenderWeb\\User\\User\\src\\main\\webapp\\assets\\img\\category_img";
+	 * 
+	 * Files.createDirectories(Paths.get(adminDir));
+	 * Files.createDirectories(Paths.get(userDir));
+	 * 
+	 * Path adminPath = Paths.get(adminDir, file.getOriginalFilename());
+	 * Files.copy(file.getInputStream(), adminPath,
+	 * StandardCopyOption.REPLACE_EXISTING);
+	 * 
+	 * byte[] bytes = file.getBytes(); Path userPath = Paths.get(userDir,
+	 * file.getOriginalFilename()); Files.write(userPath, bytes); // FIXED }
+	 * 
+	 * session.setAttribute("succMsg", "Saved successfully"); return
+	 * "redirect:/category"; }
+	 */
+    @PostMapping("/saveCategory")
+    public String saveCategory(@ModelAttribute Category category,
+                               @RequestParam("file") MultipartFile file,
+                               HttpSession session) {
+
+        try {
+
+            // 🔴 Image mandatory (frontend se)
+            if (file == null || file.isEmpty()) {
+                session.setAttribute("errorMsg", "Please upload category image");
+                return "redirect:/category";
+            }
+
+            // ✅ Unique image name (time-based)
+            String imageName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+            category.setImageName(imageName);
+
+            // ✅ Check category exists
+            Boolean existCategory = categoryservice.existCategory(category.getName());
+            if (existCategory) {
+                session.setAttribute("errorMsg", "Category Name already exists");
+                return "redirect:/category";
+            }
+
+            // ✅ Save category
+            Category savedCategory = categoryservice.saveCategory(category);
+            if (ObjectUtils.isEmpty(savedCategory)) {
+                session.setAttribute("errorMsg", "Not saved! Internal server error");
+                return "redirect:/category";
+            }
+
+            // ✅ Save image in both projects
+            String adminDir = "C:\\maltiWenderWeb\\Admin (5)\\Admin\\src\\main\\webapp\\assets\\img\\category_img";
+            String userDir  = "C:\\maltiWenderWeb\\User\\User\\src\\main\\webapp\\assets\\img\\category_img";
+
+            Files.createDirectories(Paths.get(adminDir));
+            Files.createDirectories(Paths.get(userDir));
+
+            Path adminPath = Paths.get(adminDir, imageName);
+            Path userPath  = Paths.get(userDir, imageName);
+
+            Files.copy(file.getInputStream(), adminPath, StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(file.getInputStream(), userPath, StandardCopyOption.REPLACE_EXISTING);
+
+            session.setAttribute("succMsg", "Category saved successfully");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            session.setAttribute("errorMsg", "Image upload failed");
+        }
+
+        return "redirect:/category";
+    }
+
+    // Add product page
+	/*
+	 * @GetMapping("addpro") public String product1() {
+	 * 
+	 * return"add_product";
+	 * 
+	 * }
+	 */
+    
+
+         
+		/*
+		 * List<Category> list = categoryservice.findAll();
+		 * model.addAttribute("categories", list);
+		 */
+    @GetMapping("addpro")
+    public String product1(Model model) {
+
+        List<Category> list = categoryservice.getAllCategory();
+        model.addAttribute("categories", list);
+
+        return "add_product";
+    }
+      
+    // Save product
+    @PostMapping("/saveProduct")
+    public String addProduct(@ModelAttribute Product product,
+                             @RequestParam("file") MultipartFile file,
+                             HttpSession session) throws IOException {
+
+		/*
+		 * String imageName = file != null && !file.isEmpty() ?
+		 * file.getOriginalFilename() : "default.jpg"; product.setImage(imageName);
+		 * product.setDiscount(product.getDiscount() == 0 ? 0 : product.getDiscount());
+		 * product.setDiscountPrice(product.getPrice());
+		 * 
+		 * Product saveProduct = productservice.saveProduct(product);
+		 */
+    	String imageName = (file != null && !file.isEmpty()) ? file.getOriginalFilename() : "default.jpg";
+        product.setImage(imageName);
+        product.setDiscount(product.getDiscount() == 0 ? 0 : product.getDiscount());
+        product.setDiscountPrice(product.getPrice());
+
+        Product saveProduct = productservice.saveProduct(product);
+        
+        System.out.println("save"+saveProduct);
+        if (!ObjectUtils.isEmpty(saveProduct)) {
+            if (file != null && !file.isEmpty()) {
+                String adminDir = "C:\\maltiWenderWeb\\Admin (5)\\Admin\\src\\main\\webapp\\assets\\img\\product_img";
+                String userDir = "C:\\maltiWenderWeb\\User\\User\\src\\main\\webapp\\assets\\img\\product_img";
+      System.out.println("userDir="+userDir);
+                Files.createDirectories(Paths.get(adminDir));
+                Files.createDirectories(Paths.get(userDir));
+
+                Path adminPath = Paths.get(adminDir, file.getOriginalFilename());
+                Files.copy(file.getInputStream(), adminPath, StandardCopyOption.REPLACE_EXISTING);
+
+                byte[] bytes = file.getBytes();
+                Path userPath = Paths.get(userDir, file.getOriginalFilename());
+                Files.write(userPath, bytes); // FIXED
+                System.out.printf("product"+userPath,bytes);
+            }
+
+            session.setAttribute("succMsg", "Product Saved Successfully");
+        } else {
+            session.setAttribute("errorMsg", "Something went wrong on server");
+        }
+         
+        return "redirect:add_product";
+    }
+
+    // Delete category
+    @GetMapping("/deleteCategory/{id}")
+    public String deleteCategory(@PathVariable int id, HttpSession session) {
+        Boolean deleteCategory = categoryservice.deleteCategory(id);
+
+        if (deleteCategory) {
+            session.setAttribute("succMsg", "category delete success");
+        } else {
+            session.setAttribute("errorMsg", "something wrong on server");
+        }
+
+        return "redirect:/category";
+    }
+
+    // Load edit category
+    @GetMapping("/loadEditCategory/{id}")
+    public String loadEditCategory(@PathVariable int id, Model m) {
+        m.addAttribute("category", categoryservice.getCategoryById(id));
+        return "edit_category";
+    }
+
+    // Update category
+    @PostMapping("/updateCategory")
+    public String updateCategory(@ModelAttribute Category category, @RequestParam("file") MultipartFile file,
+                                 HttpSession session) throws IOException {
+
+        Category oldCategory = categoryservice.getCategoryById(category.getId());
+        String imageName = file != null && !file.isEmpty() ? file.getOriginalFilename() : oldCategory.getImageName();
+
+        oldCategory.setName(category.getName());
+        oldCategory.setIsActive(category.getIsActive());
+        oldCategory.setImageName(imageName);
+
+        Category updateCategory = categoryservice.saveCategory(oldCategory);
+
+        if (!ObjectUtils.isEmpty(updateCategory)) {
+            if (file != null && !file.isEmpty()) {
+                String adminDir = "C:\\maltiWenderWeb\\Admin (5)\\Admin\\src\\main\\webapp\\assets\\img\\category_img";
+                String userDir = "C:\\maltiWenderWeb\\User\\User\\src\\main\\webapp\\assets\\img\\category_img";
+                 
+                Files.createDirectories(Paths.get(adminDir));
+                Files.createDirectories(Paths.get(userDir));
+
+                Path adminPath = Paths.get(adminDir, file.getOriginalFilename());
+                Files.copy(file.getInputStream(), adminPath, StandardCopyOption.REPLACE_EXISTING);
+
+                byte[] bytes = file.getBytes();
+                Path userPath = Paths.get(userDir, file.getOriginalFilename());
+                Files.write(userPath, bytes); // FIXED
+            }
+
+            session.setAttribute("succMsg", "Category update success");
+        } else {
+            session.setAttribute("errorMsg", "something wrong on server");
+        }
+
+        return "redirect:/category/" + category.getId();
+    }
+
+    // Edit product page
+    @GetMapping("/editProduct/{id}")
+    public String editProduct(@PathVariable int id, Model m) {
+        m.addAttribute("product", productservice.getProductById(id));
+        m.addAttribute("categories", categoryservice.getAllCategory());
+        return "edit_product";
+    }
+
+    // Update product
+    @PostMapping("/updateProduct")
+    public String updateProduct(@ModelAttribute Product product,
+                                @RequestParam("file") MultipartFile image,
+                                HttpSession session, Model m) {
+
+        try {
+            if (product.getDiscount() < 0 || product.getDiscount() > 100) {
+                session.setAttribute("errorMsg", "Invalid Discount");
+            } else {
+                Product updated = productservice.updateProduct(product, image);
+
+                if (!ObjectUtils.isEmpty(updated)) {
+
+                    if (image != null && !image.isEmpty()) {
+                        String fileName = image.getOriginalFilename();
+
+                        String adminPath = "C:\\maltiWenderWeb\\Admin (5)\\Admin\\src\\main\\webapp\\assets\\img\\product_img";
+                        Files.createDirectories(Paths.get(adminPath));
+                        Path adminFilePath = Paths.get(adminPath, fileName);
+                        Files.copy(image.getInputStream(), adminFilePath, StandardCopyOption.REPLACE_EXISTING);
+
+                        String userPath = "C:\\maltiWenderWeb\\User\\User\\src\\main\\webapp\\assets\\img\\product_img";
+                        Files.createDirectories(Paths.get(userPath));
+                        System.out.println("userPath");
+
+                        byte[] bytes = image.getBytes();
+                        Path userFilePath = Paths.get(userPath, fileName);
+                        Files.write(userFilePath, bytes); // FIXED
+                    }
+
+                    session.setAttribute("succMsg", "Product updated successfully");
+                } else {
+                    session.setAttribute("errorMsg", "Something went wrong on server");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            session.setAttribute("errorMsg", "Error: " + e.getMessage());
+        }
+
+        return "redirect:/editProduct/" + product.getId();
+    }
+
+    // Admin products listing
+    @GetMapping("/productview")
+    public String loadViewProduct(Model m,
+                                  @RequestParam(defaultValue = "") String ch,
+                                  @RequestParam(name = "pageNo", defaultValue = "0") Integer pageNo,
+                                  @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+
+        Page<Product> page = ch.length() > 0 ?
+                productservice.searchProductPagination(pageNo, pageSize, ch) :
+                productservice.getAllProductsPagination(pageNo, pageSize);
+       
+
+        m.addAttribute("products", page.getContent());
+        m.addAttribute("pageNo", page.getNumber());
+        m.addAttribute("pageSize", pageSize);
+        m.addAttribute("totalElements", page.getTotalElements());
+        m.addAttribute("totalPages", page.getTotalPages());
+        m.addAttribute("isFirst", page.isFirst());
+        m.addAttribute("isLast", page.isLast());
+        m.addAttribute("ch", ch);
+        System.out.println("Size = " + page.getContent().size());
+
+        return "/products";
+    }
+        // Delete product
+    @GetMapping("/deleteProduct/{id}")
+    public String deleteProduct(@PathVariable int id, HttpSession session) {
+        Boolean deleteProduct = productservice.deleteProduct(id);
+        if (deleteProduct) {
+            session.setAttribute("succMsg", "Product delete success");
+        } else {
+            session.setAttribute("errorMsg", "Something wrong on server");
+        }
+        return "redirect:/productview";
+    }
+}

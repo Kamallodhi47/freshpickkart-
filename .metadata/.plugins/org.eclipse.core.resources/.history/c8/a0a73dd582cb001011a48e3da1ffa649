@@ -1,0 +1,102 @@
+<!-- HEADER NAVIGATION (Reusable) -->
+<nav class="main-nav">
+    <div class="container">
+        <div class="d-flex flex-wrap gap-2">
+
+            <!-- Dropdown Button -->
+            <div class="dropdown">
+                <a class="nav-btn dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                    <i class="fas fa-bars me-1"></i> All Categories
+                </a>
+
+                <!-- Dropdown Menu (Dynamic Categories) -->
+                <ul class="dropdown-menu category-dropdown-menu">
+                    <c:forEach var="c" items="${categories}">
+                        <li>
+                            <a class="dropdown-item dropdown-item-premium"
+                               href="/products?categories=${c.name}">
+                                <i class="fa-solid fa-tag"></i> ${c.name}
+                            </a>
+                        </li>
+                    </c:forEach>
+                </ul>
+            </div>
+
+            <!-- Other Buttons -->
+            <a href="/products" class="nav-btn">Product</a>
+            <a href="/offers" class="nav-btn">Offers</a>
+            <a href="/customer-service" class="nav-btn">Customer Service</a>
+
+        </div>
+    </div>
+</nav>
+
+<style>
+    /* Button Style */
+    .nav-btn {
+        background: #f8f9fa;
+        border: 1px solid #ddd;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 15px;
+        font-weight: 500;
+        color: #333;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        transition: 0.3s ease;
+    }
+
+    .nav-btn:hover {
+        background: #ff6f61;
+        color: #fff;
+        border-color: #ff6f61;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    }
+
+    /* Dropdown menu styling */
+    .category-dropdown-menu {
+        max-height: 250px;
+        overflow-y: auto;
+        padding: 0;
+        border-radius: 6px;
+        border: 1px solid #ddd;
+        margin-top: 8px;
+    }
+
+    .category-dropdown-menu .dropdown-item {
+        padding: 10px 15px;
+        font-size: 15px;
+        font-weight: 500;
+        color: #333;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: 0.3s ease;
+    }
+
+    .category-dropdown-menu .dropdown-item:hover {
+        background: #ff6f61;
+        color: #fff;
+    }
+
+    /* Scrollbar custom */
+    .category-dropdown-menu::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .category-dropdown-menu::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+
+    .category-dropdown-menu::-webkit-scrollbar-thumb {
+        background: #c2c2c2;
+        border-radius: 10px;
+    }
+
+    .category-dropdown-menu::-webkit-scrollbar-thumb:hover {
+        background: #9e9e9e;
+    }
+</style>

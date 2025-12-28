@@ -1,0 +1,110 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Our Services</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f8f9fa;
+    }
+
+    .service-container {
+        width: 90%;
+        margin: auto;
+        padding: 30px;
+    }
+
+    .service-title {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .service-box {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+
+    .card {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        text-align: center;
+    }
+
+    .card h3 {
+        color: #28a745;
+        margin-bottom: 10px;
+    }
+
+    .card p {
+        font-size: 14px;
+        color: #555;
+    }
+
+    .card a {
+        display: inline-block;
+        margin-top: 15px;
+        padding: 10px 20px;
+        background: #28a745;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+
+    .card a:hover {
+        background: #218838;
+    }
+</style>
+</head>
+
+<body>
+<%@ include file="header1.jsp" %>
+<div class="service-container">
+
+    <h2 class="service-title">Our Services</h2>
+
+    <div class="service-box">
+
+        <!-- Delivery Service -->
+        <div class="card">
+            <h3>🚚 Fast Delivery</h3>
+            <p>We deliver your products safely and quickly at your doorstep.</p>
+        </div>
+
+        <!-- Return Service -->
+        <div class="card">
+            <h3>🔄 Easy Return</h3>
+            <p>Not satisfied? Return the product within 7 days easily.</p>
+        </div>
+
+        <!-- Order Tracking -->
+        <div class="card">
+            <h3>📦 Order Tracking</h3>
+            <p>Track your order status anytime from your account.</p>
+        </div>
+
+        <!-- Customer Support -->
+        <div class="card">
+            <h3>📞 Customer Support</h3>
+            <p>Need help? Our support team is always ready to assist you.</p>
+        </div>
+
+        <!-- Complaint Service -->
+        <div class="card">
+            <h3>📝 Register Complaint</h3>
+            <p>Facing any issue with your order? Register your complaint here.</p>
+            <a href="/complain">Register Complaint</a>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

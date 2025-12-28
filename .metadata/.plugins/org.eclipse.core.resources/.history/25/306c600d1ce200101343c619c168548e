@@ -1,0 +1,187 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
+<header class="main-header">
+    <div class="header-container">
+        <!-- Logo Section - LEFT -->
+        <div class="logo-section">
+            <a href="${pageContext.request.contextPath}" class="logo-link">
+                <img 
+                    src="${pageContext.request.contextPath}/assets/img/Seller_img/generated-image__4_-removebg-preview.png" 
+                    alt="FreshpickKart Logo" 
+                    loading="lazy"
+                    width="263"
+                    height="200"
+                    decoding="async"
+                    class="header-logo"
+                />
+            </a>
+        </div>
+
+        <!-- Search Section - CENTER -->
+        <div class="search-section">
+            <div class="search-container">
+                <input type="text" class="search-input"
+                    placeholder="Search products..." id="searchInput">
+                <button class="search-btn" id="searchButton">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Action Buttons - RIGHT -->
+        <div class="action-section">
+            <!-- Account Dropdown -->
+            <div class="account-dropdown">
+                <c:choose>
+                    <c:when test="${not empty sessionScope.user}">
+                        <!-- LOGGED IN USER -->
+                        <a class="header-btn" href="javascript:void(0)"
+                            onclick="headerUtils.toggleDropdown('userMenu')" id="accountButton"> 
+                            <i class="fas fa-user-circle"></i> 
+                            <span class="btn-text">${fn:substringBefore(sessionScope.user.name, ' ')}</span>
+                        </a>
+
+                        <div class="manual-dropdown-menu" id="userMenu">
+                            <div class="user-welcome">Hello, ${sessionScope.user.name}!</div>
+                            <a class="dropdown-item"
+                                href="${pageContext.request.contextPath}/profile"> 
+                                <i class="fas fa-user"></i> My Profile 
+                            </a> 
+                            <a class="dropdown-item"
+                                href="${pageContext.request.contextPath}/orders"> 
+                                <i class="fas fa-shopping-bag"></i> My Orders
+                            </a> 
+                            <a class="dropdown-item"
+                                href="${pageContext.request.contextPath}/wishlist"> 
+                                <i class="fas fa-heart"></i> Wishlist
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item text-danger"
+                                href="${pageContext.request.contextPath}/logout"> 
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </a>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <!-- GUEST USER -->
+                        <a class="header-btn" href="javascript:void(0)"
+                            onclick="headerUtils.toggleDropdown('guestMenu')" id="accountButton"> 
+                            <i class="fas fa-user"></i> 
+                            <span class="btn-text">Account</span>
+                        </a>
+
+                        <div class="manual-dropdown-menu" id="guestMenu">
+                            <a class="dropdown-item"
+                                href="${pageContext.request.contextPath}/Login"> 
+                                <i class="fas fa-sign-in-alt"></i> Login
+                            </a> 
+                            <a class="dropdown-item"
+                                href="${pageContext.request.contextPath}/register"> 
+                                <i class="fas fa-user-plus"></i> Register
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item"
+                                href="${pageContext.request.contextPath}/service"> 
+                                <i class="fas fa-headset"></i> Customer Service
+                            </a>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
+            </div>
+
+            <!-- Wishlist -->
+            <a href="${pageContext.request.contextPath}/wishlist" class="header-btn" id="wishlistButton"> 
+                <i class="fas fa-heart"></i> 
+                <span class="btn-text">Wishlist</span>
+            </a>
+
+            <!-- Cart -->
+            <a href="${pageContext.request.contextPath}/cart" class="header-btn" id="cartButton">
+                <i class="fas fa-shopping-cart"></i> 
+                <span class="btn-text">Cart</span> 
+                <span class="cart-count" id="cartCount"> 
+                    <c:choose>
+                        <c:when test="${not empty sessionScope.cartCount && sessionScope.cartCount > 0}">
+                            ${sessionScope.cartCount}
+                        </c:when>
+                        <c:otherwise>0</c:otherwise>
+                    </c:choose>
+                </span>
+            </a>
+        </div>
+    </div>
+</header>
+
+<!-- Navigation -->
+<nav class="main-nav">
+    <div class="nav-container">
+        <!-- Categories Dropdown -->
+        <div class="dropdown">
+            <button class="nav-btn dropdown-toggle" type="button"
+                onclick="headerUtils.toggleDropdown('categoryMenu')" id="categoryButton">
+                <i class="fas fa-bars"></i> 
+                <span class="btn-text">Categories</span>
+            </button>
+
+            <ul class="category-dropdown-menu" id="categoryMenu">
+                <c:forEach var="c" items="${categories}">
+                    <li><a class="dropdown-item category-item"
+                        href="${pageContext.request.contextPath}/products?categories=${c.name}"> 
+                        <i class="fa-solid fa-tag"></i> ${c.name}
+                    </a></li>
+                </c:forEach>
+            </ul>
+        </div>
+        
+        <a href="${pageContext.request.contextPath}/" class="nav-btn" id="homeButton">
+            <i class="fas fa-home"></i> 
+            <span class="btn-text">Home</span>
+        </a> 
+        
+        <!-- Products -->
+        <a href="${pageContext.request.contextPath}/products" class="nav-btn" id="productsButton">
+            <i class="fas fa-store"></i> 
+            <span class="btn-text">Products</span>
+        </a> 
+        
+        <!-- Offers -->
+        <a href="${pageContext.request.contextPath}/offers" class="nav-btn" id="offersButton">
+            <i class="fas fa-tags"></i> 
+            <span class="btn-text">Offers</span>
+        </a> 
+        
+        <!-- Customer Service -->
+        <a href="${pageContext.request.contextPath}/service" class="nav-btn" id="serviceButton"> 
+            <i class="fas fa-headset"></i> 
+            <span class="btn-text">Service</span>
+        </a>
+    </div>
+</nav>
+
+<!-- Mobile Bottom Navigation (Only for small screens) -->
+<nav class="mobile-bottom-nav" id="mobileBottomNav">
+    <a href="${pageContext.request.contextPath}/" class="mobile-nav-item active">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+    </a>
+    <a href="${pageContext.request.contextPath}/categories" class="mobile-nav-item">
+        <i class="fas fa-th-large"></i>
+        <span>Categories</span>
+    </a>
+    <a href="${pageContext.request.contextPath}/cart" class="mobile-nav-item">
+        <i class="fas fa-shopping-cart"></i>
+        <span>Cart</span>
+    </a>
+    <a href="${pageContext.request.contextPath}/account" class="mobile-nav-item">
+        <i class="fas fa-user"></i>
+        <span>Account</span>
+    </a>
+</nav>
+
+<!-- Dropdown Overlay for Mobile -->
+<div class="dropdown-overlay" id="dropdownOverlay"
+    onclick="headerUtils.closeAllDropdowns()"></div>

@@ -1,0 +1,394 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apna Shop - Premium Shopping Experience</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Premium CSS -->
+    <style>
+    /* Hero Section */
+
+
+
+    
+    .offer-scroll {
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 10px;
+    scroll-behavior: smooth;
+}
+
+.offer-scroll::-webkit-scrollbar {
+    height: 6px;
+}
+
+.offer-scroll::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 10px;
+}
+
+
+/* Offer Card */
+.offer-card {
+    min-width: 180px;
+    background: rgba(255,255,255,0.95);
+    border-radius: 15px;
+    padding: 10px;
+    display: inline-block;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    transition: 0.3s;
+}
+
+.offer-card:hover {
+    transform: translateY(-8px) scale(1.05);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+}
+
+.offer-img {
+    height: 120px;
+    width: auto;
+    object-fit: contain;
+}
+    
+        :root {
+            --primary-color: #6c63ff;
+            --secondary-color: #ff6584;
+            --premium-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --dark-color: #2a2d3b;
+        }
+
+        body {
+            background: linear-gradient(-45deg,#ee7752,#e73c7e,#23a6d5,#23d5ab);
+            background-size:400% 400%;
+            animation: gradient 15s ease infinite;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        @keyframes gradient {
+            0% { background-position:0% 50%; }
+            50% { background-position:100% 50%; }
+            100% { background-position:0% 50%; }
+        }
+
+        .main-container {
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            margin: 25px auto;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+
+        /* Section Heading */
+        .section-title {
+            text-align:center;
+            font-weight:700;
+            color:var(--dark-color);
+            margin-bottom:25px;
+            position:relative;
+        }
+
+        .section-title::after {
+            content:'';
+            width:60px;
+            height:4px;
+            background:var(--premium-gradient);
+            position:absolute;
+            bottom:-10px;
+            left:50%;
+            transform:translateX(-50%);
+        }
+
+        /* Category Card */
+        .category-card {
+            border:none;
+            border-radius:15px;
+            background:rgba(255,255,255,0.95);
+            backdrop-filter:blur(10px);
+            transition:0.4s;
+            box-shadow:0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .category-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow:0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .category-img {
+            height:120px;
+            object-fit:contain;
+            padding:10px;
+            transition:0.4s;
+        }
+
+        .category-card:hover .category-img {
+            transform:scale(1.1);
+        }
+
+        .category-link {
+            font-weight:600;
+            color:var(--dark-color);
+        }
+
+        .category-link:hover {
+            color:var(--primary-color);
+        }
+
+        /* Product Card */
+        .product-card {
+            border:none;
+            border-radius:15px;
+            background:rgba(255,255,255,0.95);
+            backdrop-filter:blur(10px);
+            transition:0.4s;
+            box-shadow:0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .product-card:hover {
+            transform:translateY(-10px) rotate(1deg);
+            box-shadow:0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .product-img {
+            height:180px;
+            object-fit:contain;
+            padding:10px;
+            transition:0.4s;
+        }
+
+        .product-card:hover .product-img {
+            transform:scale(1.1);
+        }
+
+        .product-title {
+            font-weight:600;
+            color:var(--dark-color);
+        }
+
+        .product-title:hover {
+            color:var(--primary-color);
+        }
+
+        .bg-section {
+            background:rgba(255,255,255,0.9);
+            padding:2rem;
+            border-radius:20px;
+            margin-bottom:2.5rem;
+            box-shadow:0 10px 25px rgba(0,0,0,0.12);
+        }
+    </style>
+</head>
+
+<body>
+
+    <%@ include file="header1.jsp" %>
+
+    <div class="main-container container">
+  <section class="fresh-hero">
+    <div class="fresh-slider">
+
+        <div class="slide">
+            <img src="https://images.unsplash.com/photo-1506807803488-8eafc15316c9?auto=format&fit=crop&w=2070&q=80">
+        </div>
+
+        <div class="slide">
+            <img src="https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?auto=format&fit=crop&w=2070&q=80">
+        </div>
+
+        <div class="slide">
+            <img src="https://images.unsplash.com/photo-1585325701954-343f3b94c7a9?auto=format&fit=crop&w=2070&q=80">
+        </div>
+
+        <div class="slide">
+            <img src="https://images.unsplash.com/photo-1524593119771-e107533b3bbe?auto=format&fit=crop&w=2070&q=80">
+        </div>
+
+        <div class="slide">
+            <img src="https://images.unsplash.com/photo-1603048297172-c92544798d2c?auto=format&fit=crop&w=2070&q=80">
+        </div>
+
+    </div>
+
+    <div class="fresh-content">
+        <h1>FreshMart – Freshness Delivered</h1>
+        <p>Vegetables, fruits, dairy, snacks & more with premium quality.</p>
+        <a href="#" class="fresh-btn">Shop Now</a>
+    </div>
+</section>
+  
+    
+       <!-- ⭐ OFFER SECTION -->
+<%-- <div class="bg-section">
+    <h2 class="section-title">🔥 Top Offers</h2>
+
+    <div class="offer-scroll d-flex gap-4">
+        <c:forEach var="o" items="${offerProducts}">
+            <div class="card offer-card text-center">
+                <img src="../assets/img/product_img/${o.image}" class="offer-img" alt="${o.title}">
+
+                <p class="mt-2 fw-bold text-dark">${o.title}</p>
+
+                <span class="badge bg-danger px-3 py-2 fs-6">
+                    ${o.discount}% OFF
+                </span>
+            </div>
+        </c:forEach>
+    </div>
+</div>
+ --%>   
+  <!-- ⭐ STATIC OFFER SECTION (DEMO) -->
+<!-- ⭐ TOP OFFERS SECTION (REAL E-COMMERCE STYLE) -->
+<div class="bg-section">
+    <h2 class="section-title">🔥 Top Offers</h2>
+
+    <div class="offer-scroll d-flex gap-4">
+
+        <!-- Offer 1 -->
+        <div class="card offer-card text-center p-2">
+            <img src="https://i.imgur.com/0Zy2XzK.png" class="offer-img" alt="Smartphone">
+
+            <p class="mt-2 fw-bold text-dark">Smartphone</p>
+
+            <!-- PRICE BOX -->
+            <div>
+                <span class="text-danger fw-bold">₹7,999</span>
+                <span class="text-decoration-line-through text-muted ms-1">₹12,999</span>
+                <span class="text-success ms-1 fw-bold">40% OFF</span>
+            </div>
+
+            <!-- BUTTON -->
+            <button class="btn btn-primary btn-sm mt-2">Add to Cart</button>
+        </div>
+
+        <!-- Offer 2 -->
+        <div class="card offer-card text-center p-2">
+            <img src="https://i.imgur.com/B5a8u8N.png" class="offer-img" alt="Headphones">
+
+            <p class="mt-2 fw-bold text-dark">Headphones</p>
+
+            <div>
+                <span class="text-danger fw-bold">₹899</span>
+                <span class="text-decoration-line-through text-muted ms-1">₹1,999</span>
+                <span class="text-success ms-1 fw-bold">55% OFF</span>
+            </div>
+
+            <button class="btn btn-primary btn-sm mt-2">Add to Cart</button>
+        </div>
+
+        <!-- Offer 3 -->
+        <div class="card offer-card text-center p-2">
+            <img src="https://i.imgur.com/P4oBGzl.png" class="offer-img" alt="Smartwatch">
+
+            <p class="mt-2 fw-bold text-dark">Smartwatch</p>
+
+            <div>
+                <span class="text-danger fw-bold">₹1,499</span>
+                <span class="text-decoration-line-through text-muted ms-1">₹2,199</span>
+                <span class="text-success ms-1 fw-bold">30% OFF</span>
+            </div>
+
+            <button class="btn btn-primary btn-sm mt-2">Add to Cart</button>
+        </div>
+
+        <!-- Offer 4 -->
+        <div class="card offer-card text-center p-2">
+            <img src="https://i.imgur.com/tKaVvwn.png" class="offer-img" alt="Shoes">
+
+            <p class="mt-2 fw-bold text-dark">Running Shoes</p>
+
+            <div>
+                <span class="text-danger fw-bold">₹1,299</span>
+                <span class="text-decoration-line-through text-muted ms-1">₹2,599</span>
+                <span class="text-success ms-1 fw-bold">50% OFF</span>
+            </div>
+
+            <button class="btn btn-primary btn-sm mt-2">Add to Cart</button>
+        </div>
+
+        <!-- Offer 5 -->
+        <div class="card offer-card text-center p-2">
+            <img src="https://i.imgur.com/4kLtY06.png" class="offer-img" alt="Laptop">
+
+            <p class="mt-2 fw-bold text-dark">Laptop</p>
+
+            <div>
+                <span class="text-danger fw-bold">₹42,999</span>
+                <span class="text-decoration-line-through text-muted ms-1">₹54,999</span>
+                <span class="text-success ms-1 fw-bold">20% OFF</span>
+            </div>
+
+            <button class="btn btn-primary btn-sm mt-2">Add to Cart</button>
+        </div>
+
+        <!-- Offer 6 -->
+        <div class="card offer-card text-center p-2">
+            <img src="https://i.imgur.com/L1p1Fof.png" class="offer-img" alt="Backpack">
+
+            <p class="mt-2 fw-bold text-dark">Travel Backpack</p>
+
+            <div>
+                <span class="text-danger fw-bold">₹499</span>
+                <span class="text-decoration-line-through text-muted ms-1">₹1,399</span>
+                <span class="text-success ms-1 fw-bold">65% OFF</span>
+            </div>
+
+            <button class="btn btn-primary btn-sm mt-2">Add to Cart</button>
+        </div>
+
+    </div>
+</div>
+
+        <!-- ⭐ CATEGORY SECTION -->
+        <div class="bg-section">
+            <h2 class="section-title">Shop by Category</h2>
+
+            <div class="row g-4">
+                <c:forEach var="c" items="${categories}" varStatus="loop">
+                    <div class="col-6 col-md-4 col-lg-2">
+                        <div class="card category-card" style="animation-delay:${loop.index * 0.1}s;">
+                            <div class="card-body text-center">
+                                <img src="../assets/img/category_img/${c.imageName}" class="category-img" alt="${c.name}">
+                                <div class="mt-2">
+                                    <a href="products?categories=${c.name}" class="category-link text-decoration-none">
+                                        ${c.name}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </c:forEach>
+            </div>
+        </div>
+
+        <!-- ⭐ LATEST PRODUCT SECTION -->
+        <div class="bg-section">
+            <h2 class="section-title">Latest Products</h2>
+
+            <div class="row g-4">
+                <c:forEach var="p" items="${products}" varStatus="loop">
+                    <div class="col-6 col-md-4 col-lg-3">
+                        <div class="card product-card" style="animation-delay:${loop.index * 0.1}s;">
+                            <div class="card-body text-center">
+                                <img src="../assets/img/product_img/${p.image}" class="product-img" alt="${p.title}">
+                                <div class="mt-2">
+                                    <a href="products/${p.id}" class="product-title text-decoration-none">
+                                        ${p.title}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </c:forEach>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

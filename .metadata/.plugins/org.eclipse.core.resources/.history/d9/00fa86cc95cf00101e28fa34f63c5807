@@ -1,0 +1,277 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apna Shop - Premium Shopping Experience</title>
+
+<!-- Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- GOOGLE FONT (Blinkit style) -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+/* ============================================
+    GLOBAL BLINKIT STYLE
+============================================ */
+body {
+    font-family: 'Inter', sans-serif;
+    background: #f8f9fa;
+    margin: 0;
+}
+
+.section-title {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+/* ======================================
+    HERO SECTION (Blinkit Clean Style)
+====================================== */
+.fresh-hero {
+    height: 410px;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.fresh-slider {
+    position: absolute;
+    width: 500%;
+    height: 100%;
+    display: flex;
+    animation: slider 32s linear infinite;
+}
+
+@keyframes slider {
+    0% { transform: translateX(0); }
+    20% { transform: translateX(-100%); }
+    40% { transform: translateX(-200%); }
+    60% { transform: translateX(-300%); }
+    80% { transform: translateX(-400%); }
+    100% { transform: translateX(0); }
+}
+
+.slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Blur text center */
+.fresh-content {
+    position: absolute;
+    bottom: 40px;
+    left: 40px;
+    background: rgba(0,0,0,0.45);
+    padding: 20px 30px;
+    color: white;
+    border-radius: 12px;
+    backdrop-filter: blur(5px);
+}
+
+.fresh-content h1 {
+    font-size: 42px;
+    font-weight: 800;
+}
+
+.fresh-btn {
+    background: #fff200;
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-weight: 700;
+    text-decoration: none;
+    color: #000;
+    margin-top: 5px;
+    display: inline-block;
+}
+
+/* ======================================
+     OFFER SECTION (Blinkit Look)
+====================================== */
+.offer-card {
+    min-width: 170px;
+    padding: 10px;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.10);
+    transition: .2s;
+}
+
+.offer-card:hover {
+    transform: scale(1.06);
+}
+
+.offer-img {
+    height: 100px;
+    object-fit: contain;
+}
+
+/* ======================================
+     CATEGORY SECTION (Blinkit Style)
+====================================== */
+.category-card {
+    background: white;
+    padding: 18px 10px;
+    border-radius: 18px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.10);
+    text-align: center;
+    transition: .2s;
+}
+
+.category-card:hover {
+    transform: scale(1.05);
+}
+
+.category-img {
+    height: 90px;
+    object-fit: contain;
+}
+
+/* ======================================
+     PRODUCT SECTION (Blinkit Style)
+====================================== */
+.product-card {
+    padding: 18px;
+    border-radius: 18px;
+    background: white;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+    transition: .22s;
+}
+
+.product-card:hover {
+    transform: scale(1.05);
+}
+
+.product-img {
+    height: 150px;
+    object-fit: contain;
+}
+
+</style>
+</head>
+
+<body>
+
+<%@ include file="header1.jsp" %>
+
+<!-- ===================== HERO SECTION ===================== -->
+<section class="fresh-hero">
+
+    <div class="fresh-slider">
+
+        <div class="slide">
+            <img src="${pageContext.request.contextPath}/assets/kisan.jpg">
+        </div>
+
+        <div class="slide">
+            <img src="${pageContext.request.contextPath}/assets/kkkk.jpeg">
+        </div>
+
+        <div class="slide">
+            <img src="${pageContext.request.contextPath}/assets/kisan.jpg">
+        </div>
+
+        <div class="slide">
+            <img src="${pageContext.request.contextPath}/assets/beg.jpeg">
+        </div>
+
+        <div class="slide">
+            <img src="${pageContext.request.contextPath}/assets/vegi.jpg">
+        </div>
+
+    </div>
+
+    <div class="fresh-content">
+        <h1>FreshMart – Freshness Delivered</h1>
+        <p>Vegetables, fruits, dairy, snacks & more with premium quality.</p>
+        <a href="#" class="fresh-btn">Shop Now</a>
+    </div>
+</section>
+
+
+<!-- ===================== MAIN CONTENT ===================== -->
+<div class="container">
+
+    <!-- OFFERS -->
+    <h2 class="section-title">🔥 Top Offers</h2>
+
+    <div class="d-flex gap-3 overflow-auto pb-2">
+
+        <c:forEach var="o" items="${offerProducts}">
+            <div class="offer-card text-center">
+
+                <img src="${pageContext.request.contextPath}/assets/img/product_img/${o.image}"
+                     class="offer-img">
+
+                <p class="mt-2 fw-bold">${o.title}</p>
+
+                <div>
+                    <span class="text-danger fw-bold">₹${o.discountPrice}</span>
+                    <span class="text-decoration-line-through text-muted ms-1">₹${o.price}</span>
+                    <span class="text-success ms-1 fw-bold">${o.discount}% OFF</span>
+                </div>
+
+                <button class="btn btn-warning btn-sm mt-2 fw-bold">Add</button>
+            </div>
+        </c:forEach>
+
+    </div>
+
+
+    <!-- CATEGORY SECTION -->
+    <h2 class="section-title mt-4">Shop by Category</h2>
+
+    <div class="row g-4">
+        <c:forEach var="c" items="${categories}">
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="category-card">
+                    <img src="${pageContext.request.contextPath}/assets/img/category_img/${c.imageName}"
+                         class="category-img">
+                    <p class="mt-2 fw-semibold">
+                        <a href="products?categories=${c.name}" class="text-dark text-decoration-none">
+                            ${c.name}
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </c:forEach>
+    </div>
+
+
+    <!-- LATEST PRODUCTS -->
+    <h2 class="section-title mt-4">Latest Products</h2>
+
+    <div class="row g-4">
+        <c:forEach var="p" items="${products}">
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="product-card text-center">
+
+                    <img src="${pageContext.request.contextPath}/assets/img/product_img/${p.image}"
+                         class="product-img">
+
+                    <p class="mt-2 fw-bold">
+                        <a href="${pageContext.request.contextPath}/products?id=${p.id}"
+                           class="text-dark text-decoration-none">
+                            ${p.title}
+                        </a>
+                    </p>
+
+                </div>
+            </div>
+        </c:forEach>
+    </div>
+
+</div>
+
+<%@ include file="Footar.jsp" %>
+
+</body>
+</html>

@@ -1,0 +1,329 @@
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="ISO-8859-1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Category Management</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --success-color: #4cc9f0;
+            --light-bg: #f8f9fa;
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --hover-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        body {
+            background-color: #f5f7fb;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .card-sh {
+            box-shadow: var(--card-shadow);
+            border: none;
+            border-radius: 10px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .card-sh:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 10px 10px 0 0 !important;
+            padding: 15px 20px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: 6px;
+            padding: 10px 15px;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+        
+        .btn-sm {
+            border-radius: 4px;
+            margin: 2px;
+        }
+        
+        .table th {
+            background-color: #e9ecef;
+            border-top: none;
+        }
+        
+        .pagination .page-item.active .page-link {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .pagination .page-link {
+            color: var(--primary-color);
+        }
+        
+        .status-active {
+            color: #28a745;
+            font-weight: bold;
+        }
+        
+        .status-inactive {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        
+        .alert-message {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .category-image {
+            border-radius: 5px;
+            object-fit: cover;
+        }
+        
+        .section-title {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<%@ include file="header1.jsp" %>
+    <!-- Navigation would be included here -->
+    
+    <section class="container-fluid p-4 mt-4">
+        <div class="row">
+            <!-- Add Category Card -->
+            <div class="col-md-4 mb-4">
+                <div class="card card-sh">
+                    <div class="card-header text-center">
+                        <h5 class="mb-0"><i class="fas fa-plus-circle me-2"></i>Add New Category</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <!-- Success/Error Messages -->
+                        <c:if test="${not empty sessionScope.succMsg}">
+                            <div class="alert-message alert-success">
+                                <i class="fas fa-check-circle me-2"></i>${sessionScope.succMsg}
+                            </div>
+                            <c:remove var="succMsg" scope="session"/>
+                        </c:if>
+                        
+                        <c:if test="${not empty sessionScope.errorMsg}">
+                            <div class="alert-message alert-error">
+                                <i class="fas fa-exclamation-circle me-2"></i>${sessionScope.errorMsg}
+                            </div>
+                            <c:remove var="errorMsg" scope="session"/>
+                        </c:if>
+                        
+                        <form action="/saveCategory" method="post" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Category Name</label>
+                                <input type="text" name="name" class="form-control" placeholder="Enter category name" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Status</label>
+                                <div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" checked value="true" name="isActive" id="activeStatus">
+                                        <label class="form-check-label" for="activeStatus">
+                                            <i class="fas fa-circle text-success me-1"></i> Active
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="isActive" value="false" id="inactiveStatus">
+                                        <label class="form-check-label" for="inactiveStatus">
+                                            <i class="fas fa-circle text-danger me-1"></i> Inactive
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Category Image</label>
+                                <input type="file" name="file" class="form-control" accept="image/*">
+                                <div class="form-text">Upload an image for this category (JPEG, PNG, etc.)</div>
+                            </div>
+                            
+                            <button class="btn btn-primary w-100 mt-3 py-2 fw-semibold">
+                                <i class="fas fa-save me-2"></i>Save Category
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category List Card -->
+            <div class="col-md-8">
+                <div class="card card-sh">
+                    <div class="card-header text-center">
+                        <h5 class="mb-0"><i class="fas fa-list me-2"></i>Category Details</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Category</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Image</th>
+                                        <th scope="col" class="text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <c:forEach var="cat" items="${categorys}" varStatus="c">
+                                        <tr>
+                                            <th scope="row">${c.count}</th>
+                                            <td class="fw-semibold">${cat.name}</td>
+                                            <td>
+                                                <c:choose>
+                                                    <c:when test="${cat.isActive}">
+                                                        <span class="status-active"><i class="fas fa-check-circle me-1"></i>Active</span>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <span class="status-inactive"><i class="fas fa-times-circle me-1"></i>Inactive</span>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </td>
+                                            <td>
+                                                <c:if test="${not empty cat.imageName}">
+                                                    <img src="/img/category_img/${cat.imageName}" 
+                                                         width="50" height="50" class="category-image" 
+                                                         alt="${cat.name} image">
+                                                </c:if>
+                                                <c:if test="${empty cat.imageName}">
+                                                    <span class="text-muted">No image</span>
+                                                </c:if>
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="/admin/loadEditCategory/${cat.id}" 
+                                                   class="btn btn-primary btn-sm" 
+                                                   title="Edit Category">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a href="/admin/deleteCategory/${cat.id}" 
+                                                   class="btn btn-danger btn-sm" 
+                                                   title="Delete Category"
+                                                   onclick="return confirm('Are you sure you want to delete this category?')">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
+                                    
+                                    <c:if test="${empty categorys}">
+                                        <tr>
+                                            <td colspan="5" class="text-center py-4 text-muted">
+                                                <i class="fas fa-inbox fa-2x mb-2 d-block"></i>
+                                                No categories found. Add your first category!
+                                            </td>
+                                        </tr>
+                                    </c:if>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Pagination and Summary -->
+                        <div class="d-flex justify-content-between align-items-center mt-4">
+                            <div class="fw-semibold">
+                                Total Categories: <span class="text-primary">${totalElements}</span>
+                            </div>
+                            
+                            <c:if test="${totalPages > 1}">
+                                <nav aria-label="Category pagination">
+                                    <ul class="pagination mb-0">
+                                        <li class="page-item ${pageNo == 0 ? 'disabled' : ''}">
+                                            <a class="page-link" href="/admin/category?pageNo=${pageNo-1}" aria-label="Previous">
+                                                <span aria-hidden="true">&laquo;</span>
+                                            </a>
+                                        </li>
+                                        
+                                        <c:forEach begin="1" end="${totalPages}" var="i">
+                                            <li class="page-item ${pageNo+1 == i ? 'active' : ''}">
+                                                <a class="page-link" href="/admin/category?pageNo=${i-1}">${i}</a>
+                                            </li>
+                                        </c:forEach>
+                                        
+                                        <li class="page-item ${pageNo+1 == totalPages ? 'disabled' : ''}">
+                                            <a class="page-link" href="/admin/category?pageNo=${pageNo+1}" aria-label="Next">
+                                                <span aria-hidden="true">&raquo;</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </c:if>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+     <%@ include file="Footar.jsp" %>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Add some interactive functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-hide alerts after 5 seconds
+            const alerts = document.querySelectorAll('.alert-message');
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    alert.style.transition = 'opacity 0.5s';
+                    alert.style.opacity = '0';
+                    setTimeout(() => alert.remove(), 500);
+                }, 5000);
+            });
+            
+            // Add animation to table rows
+            const tableRows = document.querySelectorAll('tbody tr');
+            tableRows.forEach(row => {
+                row.style.opacity = '0';
+                row.style.transform = 'translateY(10px)';
+                
+                setTimeout(() => {
+                    row.style.transition = 'opacity 0.3s, transform 0.3s';
+                    row.style.opacity = '1';
+                    row.style.transform = 'translateY(0)';
+                }, 100 * Array.from(tableRows).indexOf(row));
+            });
+        });
+    </script>
+</body>
+</html>

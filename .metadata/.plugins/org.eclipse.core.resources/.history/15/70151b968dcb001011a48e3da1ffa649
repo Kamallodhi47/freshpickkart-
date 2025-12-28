@@ -1,0 +1,179 @@
+<!-- header.jsp -->
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<!-- Header -->
+<header class="main-header">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-between py-2">
+
+            <!-- Logo -->
+            <a href="/" class="logo">
+                <i class="fas fa-shopping-bag"></i> FreshMart
+            </a>
+
+            <!-- Search -->
+            <div class="search-container d-flex">
+                <input type="text" class="search-input" placeholder="Search for products, brands and more">
+                <button class="search-btn"><i class="fas fa-search"></i></button>
+            </div>
+
+            <!-- Right Icons -->
+            <div class="header-actions d-flex align-items-center">
+                <a href="/profile" class="btn position-relative header-btn">
+                    <i class="fas fa-user"></i>
+                    <span>Account</span>
+                </a>
+
+                <a href="/wishlist" class="btn position-relative header-btn">
+                    <i class="fas fa-heart"></i>
+                    <span>Wishlist</span>
+                </a>
+
+                <a href="/cart" class="btn position-relative header-btn">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Cart</span>
+                    <span class="cart-count">3</span>
+                </a>
+            </div>
+
+        </div>
+    </div>
+</header>
+
+
+<!-- Navigation -->
+<nav class="main-nav">
+    <div class="container">
+        <div class="d-flex flex-wrap gap-2">
+
+            <!-- All Categories Dropdown -->
+            <div class="dropdown">
+                <a class="btn nav-btn dropdown-toggle" data-bs-toggle="dropdown">
+                    <i class="fas fa-bars me-1"></i> All Categories
+                </a>
+
+                <ul class="dropdown-menu category-menu">
+
+                    <!-- Categories Dynamic from DB -->
+                    <c:forEach var="c" items="${categories}">
+                        <li>
+                            <a class="dropdown-item category-item"
+                               href="/products?categories=${c.name}">
+                                <i class="fa-solid fa-tag"></i> ${c.name}
+                            </a>
+                        </li>
+                    </c:forEach>
+
+                </ul>
+            </div>
+
+            <!-- Other Navigation Buttons -->
+            <a href="/products" class="btn nav-btn">Products</a>
+            <a href="/offers" class="btn nav-btn">Offers</a>
+            <a href="/customer-service" class="btn nav-btn">Customer Service</a>
+
+        </div>
+    </div>
+</nav>
+
+
+<!-- Header + Navbar CSS -->
+<style>
+    /* Header */
+    .main-header {
+        background: #fff;
+        border-bottom: 1px solid #eee;
+        padding: 8px 0;
+    }
+
+    .logo {
+        font-size: 24px;
+        font-weight: bold;
+        color: #ff6f61;
+        text-decoration: none;
+    }
+
+    .logo i {
+        margin-right: 6px;
+    }
+
+    .search-container {
+        width: 40%;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px 0 0 4px;
+    }
+
+    .search-btn {
+        padding: 8px 14px;
+        background: #ff6f61;
+        color: #fff;
+        border: none;
+        border-radius: 0 4px 4px 0;
+    }
+
+    .header-btn {
+        color: #333;
+        text-decoration: none;
+        margin: 0 8px;
+        font-size: 14px;
+    }
+
+    .header-btn:hover {
+        color: #ff6f61;
+    }
+
+    .cart-count {
+        background: #ff6f61;
+        color: #fff;
+        font-size: 12px;
+        padding: 2px 6px;
+        border-radius: 50%;
+        position: absolute;
+        top: -5px;
+        right: -5px;
+    }
+
+    /* Navigation */
+    .main-nav {
+        background: #f8f9fa;
+        padding: 10px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .nav-btn {
+        background: #fff;
+        border: 1px solid #ddd;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 15px;
+        font-weight: 500;
+        color: #333;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        transition: 0.3s ease;
+    }
+
+    .nav-btn:hover {
+        background: #ff6f61;
+        color: #fff;
+        border-color: #ff6f61;
+    }
+
+    /* Dropdown Scroll */
+    .category-menu {
+        max-height: 250px;
+        overflow-y: auto;
+    }
+
+    .category-item i {
+        margin-right: 8px;
+    }
+</style>
+

@@ -1,0 +1,98 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${product.title}- Product Details</title>
+
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+.product-box {
+	background: #fff;
+	border-radius: 20px;
+	padding: 25px;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.product-img {
+	width: 100%;
+	height: 350px;
+	object-fit: contain;
+	border-radius: 15px;
+}
+
+.price-box {
+	font-size: 20px;
+}
+
+.btn-buy {
+	padding: 12px 28px;
+	border-radius: 12px;
+	background: #4a6cf7;
+	color: #fff;
+	border: none;
+	font-size: 18px;
+}
+</style>
+</head>
+
+<body>
+
+	<%@ include file="header1.jsp"%>
+
+	<div class="container my-5">
+		<div class="row g-4">
+
+			<!-- LEFT SIDE IMAGE -->
+			<div class="col-md-5">
+				<div class="product-box">
+					<img
+						src="${pageContext.request.contextPath}/assets/img/product_img/${product.image}"
+						alt="${product.title}" class="product-img">
+				</div>
+			</div>
+
+			<!-- RIGHT SIDE DETAILS -->
+			<div class="col-md-7">
+				<div class="product-box">
+					<h2>${product.title}</h2>
+
+					<div class="price-box mt-3">
+						<span class="text-danger fw-bold">₹${product.discountPrice}</span>
+						<span class="text-decoration-line-through text-muted ms-2">₹${product.price}</span>
+						<span class="text-success ms-2">${product.discount}% OFF</span>
+					</div>
+
+					<p class="mt-4">
+						<strong>Category:</strong> ${product.category}
+					</p>
+					<p>
+						<strong></strong> ${product.stockQty}
+						${product.stockUnit}
+					</p>
+					<p>
+						<strong>Description:</strong>
+					</p>
+					<p>${product.description}</p>
+
+					<button class="btn-buy mt-3">
+						<i class="fas fa-shopping-cart"></i> Add To Cart
+					</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<%@ include file="Footar.jsp"%>
+</body>
+</html>

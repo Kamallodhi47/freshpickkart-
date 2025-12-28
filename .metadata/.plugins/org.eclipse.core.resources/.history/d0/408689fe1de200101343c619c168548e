@@ -1,0 +1,1051 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<style>
+/
+* =================== HEADER SPECIFIC STYLES =================== */
+/* Global reset for header only */
+.header-reset * {       
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Main Header */
+.header-main {
+    background: linear-gradient(135deg, #131921 0%, #232f3e 100%);
+    color: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Header Container */
+.header-container {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    padding: 12px 15px;
+    gap: 12px;
+    width: 100%;
+    height: 60px;
+    background: linear-gradient(135deg, #d0dbe7, #232f3e 100%);
+}
+
+/* Logo Section */
+.header-logo-section {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.header-logo-link {
+    text-decoration: none;
+    display: block;
+}
+
+.header-logo {
+    height: 209px;
+    width: auto;
+    object-fit: contain;
+    padding-right: 60px;
+}
+
+/* Search Section */
+.header-search-section {
+    position: relative;
+    width: 100%;
+}
+
+.header-search-container {
+    display: flex;
+    width: 100%;
+    height: 40px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+    background: white;
+}
+
+.header-search-input {
+    flex: 1;
+    padding: 0 15px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    color: #333;
+    background: transparent;
+}
+
+.header-search-input::placeholder {
+    color: #888;
+    font-size: 13px;
+}
+
+.header-search-btn {
+    padding: 0 18px;
+    background: linear-gradient(135deg, #ff9900 0%, #ffac31 100%);
+    border: none;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 50px;
+    transition: all 0.3s ease;
+}
+
+.header-search-btn:hover {
+    background: linear-gradient(135deg, #ff8c00 0%, #ff9a00 100%);
+}
+
+.header-search-btn i {
+    font-size: 16px;
+}
+
+/* Action Buttons */
+.header-action-section {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.header-action-btn {
+    color: #fff;
+    text-decoration: none;
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    position: relative;
+    cursor: pointer;
+    padding: 6px 8px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    min-width: 44px;
+    min-height: 44px;
+    justify-content: center;
+}
+
+.header-action-btn i {
+    font-size: 18px;
+    margin-bottom: 2px;
+}
+
+.header-action-btn span:not(.header-cart-count) {
+    font-size: 10px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 60px;
+}
+
+.header-action-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+}
+
+/* Cart Count */
+.header-cart-count {
+    background: linear-gradient(135deg, #ff4444 0%, #ff6b6b 100%);
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 1px 5px;
+    border-radius: 50%;
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    min-width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Account Dropdown */
+.header-account-dropdown {
+    position: relative;
+}
+
+.header-manual-dropdown-menu {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1100;
+    background-color: white;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 320px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    display: none;
+    overflow: hidden;
+    animation: headerSlideUp 0.3s ease;
+}
+
+@keyframes headerSlideUp {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -40%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+.header-manual-dropdown-menu.show {
+    display: block !important;
+}
+
+.header-dropdown-item {
+    color: #333 !important;
+    padding: 14px 20px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 15px;
+    border-bottom: 1px solid #f0f0f0;
+    transition: all 0.2s ease;
+}
+
+.header-dropdown-item:last-child {
+    border-bottom: none;
+}
+
+.header-dropdown-item:hover {
+    background-color: #f8f9fa;
+    padding-left: 25px;
+}
+
+.header-dropdown-item i {
+    width: 20px;
+    text-align: center;
+    color: #666;
+}
+
+.header-user-welcome {
+    padding: 18px 20px;
+    background: linear-gradient(135deg, #4a6cf7 0%, #6c63ff 100%);
+    color: white;
+    font-weight: 600;
+    font-size: 16px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.header-dropdown-divider {
+    height: 1px;
+    background: #eee;
+    margin: 5px 0;
+}
+
+/* Navigation */
+.header-main-nav {
+    background: linear-gradient(135deg, #232f3e 0%, #37475a 100%);
+    padding: 12px 0;
+    margin-top: 60px;
+    position: sticky;
+    top: 60px;
+    z-index: 999;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.header-nav-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 15px;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.header-nav-container::-webkit-scrollbar {
+    display: none;
+}
+
+.header-nav-btn {
+    padding: 10px 14px;
+    border-radius: 25px;
+    font-size: 13px;
+    text-decoration: none;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    min-height: 40px;
+}
+
+.header-nav-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.header-nav-btn i {
+    font-size: 14px;
+}
+
+/* Categories Dropdown */
+.header-category-dropdown {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.header-category-dropdown-menu {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1100;
+    background-color: white;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 320px;
+    max-height: 70vh;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    display: none;
+    overflow-y: auto;
+    animation: headerSlideUp 0.3s ease;
+}
+
+.header-category-dropdown-menu.show {
+    display: block !important;
+}
+
+.header-category-item {
+    color: #333 !important;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 15px;
+    border-bottom: 1px solid #f0f0f0;
+    transition: all 0.2s ease;
+}
+
+.header-category-item:hover {
+    background: #f8f9fa;
+    padding-left: 25px;
+}
+
+.header-category-item i {
+    color: #4a6cf7;
+    width: 20px;
+    text-align: center;
+}
+
+/* Mobile Overlay */
+.header-dropdown-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1099;
+    display: none;
+    backdrop-filter: blur(5px);
+    animation: headerFadeIn 0.3s ease;
+}
+
+@keyframes headerFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.header-dropdown-overlay.show {
+    display: block;
+}
+
+/* Mobile Bottom Navigation */
+.header-mobile-bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: white;
+    display: none;
+    justify-content: space-around;
+    padding: 12px 0 8px;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+    z-index: 1000;
+    border-top: 1px solid #eee;
+    backdrop-filter: blur(10px);
+}
+
+.header-mobile-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #666;
+    font-size: 10px;
+    flex: 1;
+    padding: 4px 0;
+    transition: all 0.3s ease;
+}
+
+.header-mobile-nav-item i {
+    font-size: 18px;
+    margin-bottom: 4px;
+    color: #4a6cf7;
+}
+
+.header-mobile-nav-item.active {
+    color: #4a6cf7;
+    font-weight: 600;
+}
+
+.header-mobile-nav-item span {
+    font-size: 10px;
+}
+
+/* =================== RESPONSIVE DESIGN =================== */
+
+/* Tablet */
+@media (min-width: 768px) {
+    .header-container {
+        height: 70px;
+        padding: 15px 20px;
+        gap: 20px;
+    }
+    
+    .header-search-container {
+        height: 44px;
+    }
+    
+    .header-search-input {
+        font-size: 15px;
+        padding: 0 20px;
+    }
+    
+    .header-search-btn {
+        padding: 0 25px;
+        min-width: 60px;
+    }
+    
+    .header-action-section {
+        gap: 15px;
+    }
+    
+    .header-action-btn {
+        flex-direction: row;
+        gap: 6px;
+        padding: 8px 12px;
+        font-size: 14px;
+        min-width: auto;
+    }
+    
+    .header-action-btn i {
+        margin-bottom: 0;
+        font-size: 20px;
+    }
+    
+    .header-action-btn span:not(.header-cart-count) {
+        font-size: 13px;
+        max-width: none;
+    }
+    
+    .header-cart-count {
+        top: 5px;
+        right: 5px;
+        font-size: 11px;
+        min-width: 18px;
+        height: 18px;
+    }
+    
+    .header-main-nav {
+        margin-top: 70px;
+    }
+    
+    .header-nav-btn {
+        padding: 12px 18px;
+        font-size: 14px;
+        gap: 8px;
+    }
+    
+    .header-nav-btn i {
+        font-size: 16px;
+    }
+    
+    .header-mobile-bottom-nav {
+        display: none !important;
+    }
+}
+
+/* Desktop */
+@media (min-width: 992px) {
+    .header-container {
+        height: 80px;
+        padding: 0 30px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    
+    .header-search-container {
+        height: 48px;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    
+    .header-search-input {
+        font-size: 16px;
+    }
+    
+    .header-search-btn {
+        padding: 0 30px;
+        min-width: 70px;
+    }
+    
+    .header-action-section {
+        gap: 25px;
+    }
+    
+    .header-action-btn {
+        padding: 10px 16px;
+        font-size: 15px;
+        gap: 8px;
+    }
+    
+    .header-action-btn i {
+        font-size: 22px;
+    }
+    
+    .header-manual-dropdown-menu,
+    .header-category-dropdown-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        transform: none;
+        width: 280px;
+        max-width: 280px;
+        animation: headerSlideDown 0.3s ease;
+    }
+    
+    @keyframes headerSlideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .header-main-nav {
+        margin-top: 80px;
+        padding: 15px 0;
+    }
+    
+    .header-nav-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 30px;
+        justify-content: flex-start;
+        gap: 15px;
+        overflow-x: visible;
+    }
+    
+    .header-nav-btn {
+        padding: 12px 20px;
+        font-size: 15px;
+        gap: 10px;
+    }
+    
+    .header-dropdown-overlay {
+        display: none !important;
+    }
+}
+
+/* Large Desktop */
+@media (min-width: 1200px) {
+    .header-container {
+        max-width: 1600px;
+    }
+    
+    .header-nav-container {
+        max-width: 1600px;
+    }
+    
+    .header-search-container {
+        max-width: 700px;
+    }
+}
+
+/* Touch Optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .header-action-btn:hover,
+    .header-nav-btn:hover,
+    .header-dropdown-item:hover,
+    .header-category-item:hover {
+        transform: none;
+        background: none;
+    }
+    
+    .header-action-btn:active,
+    .header-nav-btn:active {
+        background: rgba(255, 255, 255, 0.2);
+        transform: scale(0.95);
+    }
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+    .header-manual-dropdown-menu,
+    .header-category-dropdown-menu {
+        background-color: #1e1e1e;
+        border: 1px solid #333;
+    }
+    
+    .header-dropdown-item,
+    .header-category-item {
+        color: #e0e0e0 !important;
+        border-bottom-color: #333;
+    }
+    
+    .header-dropdown-item:hover,
+    .header-category-item:hover {
+        background-color: #2a2a2a;
+    }
+    
+    .header-user-welcome {
+        background: linear-gradient(135deg, #3a5ce5 0%, #5b52e6 100%);
+    }
+}
+</style>/
+<header class="main-header">
+    <div class="header-container">
+        <!-- Logo Section - LEFT -->
+        <div class="logo-section">
+            <a href="${pageContext.request.contextPath}" class="logo-link">
+                <img 
+                    src="${pageContext.request.contextPath}/assets/img/Seller_img/generated-image__4_-removebg-preview.png" 
+                    alt="FreshpickKart Logo" 
+                    loading="lazy"
+                    width="263"
+                    height="200"
+                    decoding="async"
+                    class="header-logo"
+                />
+            </a>
+        </div>
+
+        <!-- Search Section - CENTER -->
+        <div class="search-section">
+            <div class="search-container">
+                <input type="text" class="search-input"
+                    placeholder="Search products..." id="searchInput">
+                <button class="search-btn" id="searchButton">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Action Buttons - RIGHT -->
+        <div class="action-section">
+            <!-- Account Dropdown -->
+            <div class="account-dropdown">
+                <c:choose>
+                    <c:when test="${not empty sessionScope.user}">
+                        <!-- LOGGED IN USER -->
+                        <a class="header-btn" href="javascript:void(0)"
+                            onclick="headerUtils.toggleDropdown('userMenu')" id="accountButton"> 
+                            <i class="fas fa-user-circle"></i> 
+                            <span class="btn-text">${fn:substringBefore(sessionScope.user.name, ' ')}</span>
+                        </a>
+
+                        <div class="manual-dropdown-menu" id="userMenu">
+                            <div class="user-welcome">Hello, ${sessionScope.user.name}!</div>
+                            <a class="dropdown-item"
+                                href="${pageContext.request.contextPath}/profile"> 
+                                <i class="fas fa-user"></i> My Profile 
+                            </a> 
+                            <a class="dropdown-item"
+                                href="${pageContext.request.contextPath}/orders"> 
+                                <i class="fas fa-shopping-bag"></i> My Orders
+                            </a> 
+                            <a class="dropdown-item"
+                                href="${pageContext.request.contextPath}/wishlist"> 
+                                <i class="fas fa-heart"></i> Wishlist
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item text-danger"
+                                href="${pageContext.request.contextPath}/logout"> 
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </a>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <!-- GUEST USER -->
+                        <a class="header-btn" href="javascript:void(0)"
+                            onclick="headerUtils.toggleDropdown('guestMenu')" id="accountButton"> 
+                            <i class="fas fa-user"></i> 
+                            <span class="btn-text">Account</span>
+                        </a>
+
+                        <div class="manual-dropdown-menu" id="guestMenu">
+                            <a class="dropdown-item"
+                                href="${pageContext.request.contextPath}/Login"> 
+                                <i class="fas fa-sign-in-alt"></i> Login
+                            </a> 
+                            <a class="dropdown-item"
+                                href="${pageContext.request.contextPath}/register"> 
+                                <i class="fas fa-user-plus"></i> Register
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item"
+                                href="${pageContext.request.contextPath}/service"> 
+                                <i class="fas fa-headset"></i> Customer Service
+                            </a>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
+            </div>
+
+            <!-- Wishlist -->
+            <a href="${pageContext.request.contextPath}/wishlist" class="header-btn" id="wishlistButton"> 
+                <i class="fas fa-heart"></i> 
+                <span class="btn-text">Wishlist</span>
+            </a>
+
+            <!-- Cart -->
+            <a href="${pageContext.request.contextPath}/cart" class="header-btn" id="cartButton">
+                <i class="fas fa-shopping-cart"></i> 
+                <span class="btn-text">Cart</span> 
+                <span class="cart-count" id="cartCount"> 
+                    <c:choose>
+                        <c:when test="${not empty sessionScope.cartCount && sessionScope.cartCount > 0}">
+                            ${sessionScope.cartCount}
+                        </c:when>
+                        <c:otherwise>0</c:otherwise>
+                    </c:choose>
+                </span>
+            </a>
+        </div>
+    </div>
+</header>
+
+<!-- Navigation -->
+<nav class="main-nav">
+    <div class="nav-container">
+        <!-- Categories Dropdown -->
+        <div class="dropdown">
+            <button class="nav-btn dropdown-toggle" type="button"
+                onclick="headerUtils.toggleDropdown('categoryMenu')" id="categoryButton">
+                <i class="fas fa-bars"></i> 
+                <span class="btn-text">Categories</span>
+            </button>
+
+            <ul class="category-dropdown-menu" id="categoryMenu">
+                <c:forEach var="c" items="${categories}">
+                    <li><a class="dropdown-item category-item"
+                        href="${pageContext.request.contextPath}/products?categories=${c.name}"> 
+                        <i class="fa-solid fa-tag"></i> ${c.name}
+                    </a></li>
+                </c:forEach>
+            </ul>
+        </div>
+        
+        <a href="${pageContext.request.contextPath}/" class="nav-btn" id="homeButton">
+            <i class="fas fa-home"></i> 
+            <span class="btn-text">Home</span>
+        </a> 
+        
+        <!-- Products -->
+        <a href="${pageContext.request.contextPath}/products" class="nav-btn" id="productsButton">
+            <i class="fas fa-store"></i> 
+            <span class="btn-text">Products</span>
+        </a> 
+        
+        <!-- Offers -->
+        <a href="${pageContext.request.contextPath}/offers" class="nav-btn" id="offersButton">
+            <i class="fas fa-tags"></i> 
+            <span class="btn-text">Offers</span>
+        </a> 
+        
+        <!-- Customer Service -->
+        <a href="${pageContext.request.contextPath}/service" class="nav-btn" id="serviceButton"> 
+            <i class="fas fa-headset"></i> 
+            <span class="btn-text">Service</span>
+        </a>
+    </div>
+</nav>
+
+<!-- Mobile Bottom Navigation (Only for small screens) -->
+<nav class="mobile-bottom-nav" id="mobileBottomNav">
+    <a href="${pageContext.request.contextPath}/" class="mobile-nav-item active">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+    </a>
+    <a href="${pageContext.request.contextPath}/categories" class="mobile-nav-item">
+        <i class="fas fa-th-large"></i>
+        <span>Categories</span>
+    </a>
+    <a href="${pageContext.request.contextPath}/cart" class="mobile-nav-item">
+        <i class="fas fa-shopping-cart"></i>
+        <span>Cart</span>
+    </a>
+    <a href="${pageContext.request.contextPath}/account" class="mobile-nav-item">
+        <i class="fas fa-user"></i>
+        <span>Account</span>
+    </a>
+</nav>
+
+<!-- Dropdown Overlay for Mobile -->
+<div class="dropdown-overlay" id="dropdownOverlay"
+    onclick="headerUtils.closeAllDropdowns()"></div>
+    
+    
+    
+    
+    
+    <script>
+ // Header Utilities - कोई conflict नहीं होगा
+    const headerUtils = (function() {
+        // ================= PRIVATE VARIABLES =================
+        let currentDropdown = null;
+        
+        // ================= MOBILE DETECTION =================
+        const isMobile = () => {
+            return window.innerWidth <= 768 || 
+                   /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        };
+        
+        // ================= DROPDOWN MANAGEMENT =================
+        function toggleDropdown(menuId) {
+            const menu = document.getElementById(menuId);
+            const overlay = document.getElementById('dropdownOverlay');
+            
+            if (!menu) return;
+            
+            if (currentDropdown === menuId) {
+                closeDropdown();
+            } else {
+                closeDropdown();
+                currentDropdown = menuId;
+                menu.classList.add('show');
+                
+                // Mobile specific behavior
+                if (isMobile()) {
+                    if (overlay) overlay.classList.add('show');
+                    document.body.style.overflow = 'hidden';
+                }
+            }
+        }
+        
+        function closeDropdown() {
+            if (currentDropdown) {
+                const menu = document.getElementById(currentDropdown);
+                const overlay = document.getElementById('dropdownOverlay');
+                
+                if (menu) menu.classList.remove('show');
+                if (overlay) overlay.classList.remove('show');
+                
+                document.body.style.overflow = '';
+                currentDropdown = null;
+            }
+        }
+        
+        function closeAllDropdowns() {
+            document.querySelectorAll('.manual-dropdown-menu, .category-dropdown-menu').forEach(function(menu) {
+                menu.classList.remove('show');
+            });
+            const overlay = document.getElementById('dropdownOverlay');
+            if (overlay) overlay.classList.remove('show');
+            document.body.style.overflow = '';
+            currentDropdown = null;
+        }
+        
+        // ================= SEARCH FUNCTIONALITY =================
+        function initSearch() {
+            const searchInput = document.getElementById('searchInput');
+            const searchButton = document.getElementById('searchButton');
+            
+            if (!searchInput || !searchButton) return;
+            
+            function performSearch() {
+                const searchTerm = searchInput.value.trim();
+                if (searchTerm) {
+                    window.location.href = '${pageContext.request.contextPath}/products?search=' + encodeURIComponent(searchTerm);
+                }
+            }
+            
+            searchButton.addEventListener('click', performSearch);
+            
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+            
+            // Mobile search enhancement
+            if (isMobile()) {
+                searchInput.addEventListener('focus', function() {
+                    this.parentElement.style.boxShadow = '0 5px 20px rgba(255, 153, 0, 0.3)';
+                });
+                
+                searchInput.addEventListener('blur', function() {
+                    this.parentElement.style.boxShadow = '0 3px 8px rgba(0, 0, 0, 0.2)';
+                });
+            }
+        }
+        
+        // ================= CART FUNCTIONALITY =================
+        function updateCartCount(count) {
+            const cartCountElement = document.getElementById('cartCount');
+            if (cartCountElement) {
+                cartCountElement.textContent = count;
+                
+                // Mobile animation
+                if (isMobile()) {
+                    cartCountElement.style.transform = 'scale(1.5)';
+                    cartCountElement.style.background = 'linear-gradient(135deg, #ff0000 0%, #ff6b6b 100%)';
+                    
+                    // Vibrate on mobile
+                    if (navigator.vibrate) {
+                        navigator.vibrate(50);
+                    }
+                    
+                    setTimeout(() => {
+                        cartCountElement.style.transform = 'scale(1)';
+                        cartCountElement.style.background = 'linear-gradient(135deg, #ff4444 0%, #ff6b6b 100%)';
+                    }, 300);
+                }
+            }
+        }
+        
+        // ================= MOBILE BOTTOM NAV =================
+        function initMobileNav() {
+            const mobileBottomNav = document.getElementById('mobileBottomNav');
+            
+            function checkScreenSize() {
+                if (window.innerWidth <= 480) {
+                    if (mobileBottomNav) mobileBottomNav.style.display = 'flex';
+                    document.body.style.paddingBottom = '60px';
+                } else {
+                    if (mobileBottomNav) mobileBottomNav.style.display = 'none';
+                    document.body.style.paddingBottom = '';
+                }
+            }
+            
+            checkScreenSize();
+            window.addEventListener('resize', checkScreenSize);
+        }
+        
+        // ================= TOUCH OPTIMIZATIONS =================
+        function initTouchOptimizations() {
+            // Add touch feedback to all buttons
+            const touchElements = document.querySelectorAll('.header-btn, .nav-btn, .mobile-nav-item');
+            touchElements.forEach(el => {
+                el.addEventListener('touchstart', function() {
+                    this.style.opacity = '0.8';
+                    this.style.transform = 'scale(0.95)';
+                });
+                
+                el.addEventListener('touchend', function() {
+                    this.style.opacity = '';
+                    this.style.transform = '';
+                });
+            });
+            
+            // Close dropdown when clicking outside (desktop only)
+            if (!isMobile()) {
+                document.addEventListener('click', function(event) {
+                    if (!event.target.closest('.account-dropdown') && 
+                        !event.target.closest('.dropdown') &&
+                        !event.target.closest('.manual-dropdown-menu') &&
+                        !event.target.closest('.category-dropdown-menu')) {
+                        closeAllDropdowns();
+                    }
+                });
+            }
+            
+            // Close dropdown on escape key
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape') {
+                    closeAllDropdowns();
+                }
+            });
+        }
+        
+        // ================= WINDOW RESIZE HANDLER =================
+        function initResizeHandler() {
+            let resizeTimeout;
+            window.addEventListener('resize', function() {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(function() {
+                    // Close dropdowns when switching from mobile to desktop
+                    if (!isMobile()) {
+                        closeAllDropdowns();
+                    }
+                    
+                    // Update mobile bottom nav
+                    const mobileBottomNav = document.getElementById('mobileBottomNav');
+                    if (window.innerWidth <= 480) {
+                        if (mobileBottomNav) mobileBottomNav.style.display = 'flex';
+                        document.body.style.paddingBottom = '60px';
+                    } else {
+                        if (mobileBottomNav) mobileBottomNav.style.display = 'none';
+                        document.body.style.paddingBottom = '';
+                    }
+                }, 150);
+            });
+        }
+        
+        // ================= INITIALIZATION =================
+        function init() {
+            initSearch();
+            initMobileNav();
+            initTouchOptimizations();
+            initResizeHandler();
+            closeAllDropdowns();
+            
+            // Mobile performance optimizations
+            if (isMobile()) {
+                document.addEventListener('touchmove', function() {}, { passive: true });
+            }
+        }
+        
+        // ================= PUBLIC API =================
+        return {
+            init: init,
+            toggleDropdown: toggleDropdown,
+            closeDropdown: closeDropdown,
+            closeAllDropdowns: closeAllDropdowns,
+            updateCartCount: updateCartCount,
+            isMobile: isMobile
+        };
+    })();
+
+    // Initialize on DOM ready
+    document.addEventListener('DOMContentLoaded', function() {
+        headerUtils.init();
+    });
+    </script>

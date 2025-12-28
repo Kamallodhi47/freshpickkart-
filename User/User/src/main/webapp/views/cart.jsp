@@ -1,0 +1,649 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Your Cart</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+body {
+    background: #f1f3f6;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.cart-card {
+    border-radius: 12px;
+    padding: 20px;
+    background: #fff;
+    margin-bottom: 18px;
+    display: flex;
+    gap: 25px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+    border: 1px solid #eaeaea;
+    position: relative;
+}
+
+.cart-card:hover {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.cart-card img {
+    border-radius: 10px;
+    object-fit: cover;
+    border: 1px solid #eee;
+}
+
+.summary-box {
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 20px;
+    border: 1px solid #eaeaea;
+}
+
+.quantity-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 15px 0;
+}
+
+.qty-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #f0f2f5;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 18px;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.qty-btn:hover {
+    background: #e0e4e9;
+    transform: scale(1.05);
+}
+
+.qty-input {
+    width: 60px;
+    height: 40px;
+    text-align: center;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.qty-input:focus {
+    border-color: #198754;
+    box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+    outline: none;
+}
+
+.delete-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #dc3545;
+    color: white;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.delete-btn:hover {
+    background: #c82333;
+    transform: scale(1.1);
+}
+
+.item-total {
+    font-size: 18px;
+    font-weight: 700;
+    color: #28a745;
+    background: #f8f9fa;
+    padding: 8px 15px;
+    border-radius: 8px;
+    display: inline-block;
+}
+
+.empty-cart {
+    text-align: center;
+    padding: 60px 20px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.empty-cart i {
+    font-size: 70px;
+    color: #6c757d;
+    margin-bottom: 20px;
+}
+
+.price-details {
+    color: #495057;
+    font-size: 16px;
+    margin: 8px 0;
+}
+
+.product-title {
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: 8px;
+    font-size: 18px;
+}
+
+.unit-price {
+    color: #6c757d;
+    font-size: 16px;
+}
+
+.actions-row {
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.save-later-btn {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.save-later-btn:hover {
+    background: #5a6268;
+}
+
+.update-btn {
+    background: #198754;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.update-btn:hover {
+    background: #157347;
+}
+
+.grand-total {
+    font-size: 24px;
+    color: #198754;
+    font-weight: 700;
+}
+
+.free-delivery {
+    color: #28a745;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.loading {
+    display: none;
+    text-align: center;
+    padding: 20px;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #198754;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 15px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.success-message {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #28a745;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 9999;
+    display: none;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .cart-card {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .cart-card img {
+        width: 100%;
+        height: 180px;
+    }
+    
+      .quantity-box {
+        justify-content: center;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Success Message -->
+<div id="successMessage" class="success-message">
+    <i class="fas fa-check-circle me-2"></i>
+    <span id="messageText"></span>
+</div>
+
+<div class="container mt-4 mb-5">
+
+    <h3 class="mb-4"><i class="fas fa-shopping-cart me-2"></i>Your Shopping Cart</h3>
+
+    <div class="row">
+
+        <!-- LEFT : CART ITEMS -->
+        <div class="col-md-8">
+            
+            <!-- Loading Spinner -->
+            <div id="loading" class="loading">
+                <div class="loading-spinner"></div>
+                <p>Updating cart...</p>
+            </div>
+            
+            <c:choose>
+                <c:when test="${not empty cartItems && fn:length(cartItems) > 0}">
+                    <c:set var="grandTotal" value="0"/>
+                    
+                    <c:forEach var="c" items="${cartItems}" varStatus="status">
+                        <div class="cart-card" id="cart-item-${c.id}">
+                            
+                            <!-- Delete Button -->
+                            <button class="delete-btn" onclick="deleteItem(${c.id})" 
+                                    title="Remove item">
+                                <i class="fas fa-times"></i>
+                            </button>
+                            
+                            <!-- Product Image -->
+                            <img src="${pageContext.request.contextPath}/assets/img/product_img/${c.productImage}"
+                                 width="120" height="120"
+                                 onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/assets/default-product.jpg'"/>
+                            
+                            <div style="flex: 1;">
+                                <!-- Product Name -->
+                                <h5 class="product-title">${c.productName}</h5>
+                                
+                                <!-- Unit Price -->
+                                <p class="price-details">
+                                    <span class="unit-price">Price: ₹${c.price} per item</span>
+                                </p>
+                                
+                                <!-- Quantity Selector -->
+                                <div class="quantity-box">
+                                    <label class="me-2"><strong>Quantity:</strong></label>
+                                    <button class="qty-btn" onclick="changeQuantity(${c.id}, -1)">-</button>
+                                    <input type="number" 
+                                           value="${c.quantity}" 
+                                           id="qty-${c.id}" 
+                                           class="qty-input"
+                                           min="1" 
+                                           max="99"
+                                           onchange="updateQuantityInput(${c.id}, this.value)">
+                                    <button class="qty-btn" onclick="changeQuantity(${c.id}, 1)">+</button>
+                                </div>
+                                
+                                <!-- Item Total -->
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <p class="item-total" id="item-total-${c.id}">
+                                        Item Total: ₹${c.totalPrice}
+                                    </p>
+                                    
+                                    <!-- Action Buttons -->
+                                    <div class="actions-row">
+                                        <button class="save-later-btn" onclick="saveForLater(${c.id})">
+                                            <i class="far fa-bookmark me-1"></i> Save
+                                        </button>
+                                        <button class="update-btn" onclick="updateItem(${c.id})">
+                                            <i class="fas fa-sync-alt me-1"></i> Update
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- GRAND TOTAL CALCULATION -->
+                        <c:set var="grandTotal" value="${grandTotal + c.totalPrice}" />
+                    </c:forEach>
+                </c:when>
+                
+                <c:otherwise>
+                    <!-- Empty Cart Message -->
+                    <div class="empty-cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <h3 class="text-muted mb-3">Your cart is empty</h3>
+                        <p class="text-muted mb-4">Add some products to get started!</p>
+                        <a href="${pageContext.request.contextPath}/home" 
+                           class="btn btn-primary btn-lg">
+                            <i class="fas fa-shopping-bag me-2"></i>Continue Shopping
+                        </a>
+                    </div>
+                </c:otherwise>
+            </c:choose>
+        </div>
+
+        <!-- RIGHT : ORDER SUMMARY -->
+        <div class="col-md-4">
+            <div class="summary-box">
+                <h5><i class="fas fa-receipt me-2"></i>Order Summary</h5>
+                <hr/>
+                
+                <!-- Summary Details -->
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Items (${fn:length(cartItems)})</span>
+                        <span>₹${grandTotal}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Delivery Charges</span>
+                        <span class="text-success">FREE</span>
+                    </div>
+                    <c:if test="${grandTotal < 500}">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Minimum order</span>
+                            <span>₹500</span>
+                        </div>
+                    </c:if>
+                </div>
+                
+                <hr/>
+                
+                <!-- Grand Total -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5>Grand Total</h5>
+                    <h4 class="grand-total" id="grand-total-display">₹${grandTotal}</h4>
+                </div>
+                
+                <!-- Delivery Message -->
+                <p class="free-delivery">
+                    <i class="fas fa-truck me-1"></i>
+                    Free delivery on orders above ₹500
+                </p>
+                
+                <!-- Checkout Button -->
+                <c:choose>
+                    <c:when test="${not empty cartItems && fn:length(cartItems) > 0}">
+                        <a href="${pageContext.request.contextPath}/chackout" 
+                           class="btn btn-success w-100 btn-lg">
+                            <i class="fas fa-lock me-2"></i>Proceed to Checkout
+                        </a>
+                    </c:when>
+                    <c:otherwise>
+                        <button class="btn btn-secondary w-100 btn-lg" disabled>
+                            <i class="fas fa-lock me-2"></i>Proceed to Checkout
+                        </button>
+                    </c:otherwise>
+                </c:choose>
+                
+                <!-- Continue Shopping -->
+                <div class="text-center mt-3">
+                    <a href="${pageContext.request.contextPath}/home" 
+                       class="text-decoration-none">
+                        <i class="fas fa-arrow-left me-1"></i>Continue Shopping
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+// Function to show notification
+function showNotification(message, type = 'success') {
+    const msgBox = document.getElementById('successMessage');
+    const msgText = document.getElementById('messageText');
+    
+    msgText.textContent = message;
+    msgBox.style.display = 'block';
+    msgBox.style.background = type === 'success' ? '#28a745' : 
+                              type === 'error' ? '#dc3545' : '#ffc107';
+    
+    // Hide after 3 seconds
+    setTimeout(() => {
+        msgBox.style.display = 'none';
+    }, 3000);
+}
+
+// Function to show/hide loading
+function showLoading(show) {
+    const loading = document.getElementById('loading');
+    if (show) {
+        loading.style.display = 'block';
+    } else {
+        loading.style.display = 'none';
+    }
+}
+
+// Function to change quantity
+function changeQuantity(cartId, delta) {
+    const input = document.getElementById(`qty-${cartId}`);
+    let currentQty = parseInt(input.value) || 1;
+    
+    currentQty += delta;
+    if (currentQty < 1) currentQty = 1;
+    if (currentQty > 99) currentQty = 99;
+    
+    input.value = currentQty;
+    
+    // Auto-update if quantity is valid
+    if (currentQty >= 1) {
+        updateCartItem(cartId, currentQty);
+    }
+}
+
+// Function to update quantity via input
+function updateQuantityInput(cartId, value) {
+    let qty = parseInt(value) || 1;
+    if (qty < 1) qty = 1;
+    if (qty > 99) qty = 99;
+    
+    document.getElementById(`qty-${cartId}`).value = qty;
+    updateCartItem(cartId, qty);
+}
+
+// Function to update cart item via API
+function updateCartItem(cartId, quantity) {
+    showLoading(true);
+    
+    fetch('${pageContext.request.contextPath}/cart/update-qty', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify({
+            cartId: cartId,
+            quantity: quantity
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        showLoading(false);
+        
+        if (data.success) {
+            // Update item total
+            const itemTotalEl = document.getElementById(`item-total-${cartId}`);
+            if (itemTotalEl && data.itemTotal) {
+                itemTotalEl.textContent = `Item Total: ₹${data.itemTotal}`;
+            }
+            
+            // Update grand total
+            const grandTotalEl = document.getElementById('grand-total-display');
+            if (grandTotalEl && data.grandTotal) {
+                grandTotalEl.textContent = `₹${data.grandTotal}`;
+            }
+            
+            // Show success message
+            showNotification('Cart updated successfully!');
+            
+            // If quantity is 0, remove item
+            if (quantity === 0) {
+                document.getElementById(`cart-item-${cartId}`).remove();
+                checkEmptyCart();
+            }
+        } else {
+            showNotification('Failed to update cart', 'error');
+        }
+    })
+    .catch(error => {
+        showLoading(false);
+        console.error("Error:", error);
+        showNotification('Network error. Please try again.', 'error');
+    });
+}
+
+// Function to manually update item
+function updateItem(cartId) {
+    const input = document.getElementById(`qty-${cartId}`);
+    const qty = parseInt(input.value) || 1;
+    updateCartItem(cartId, qty);
+}
+
+// Function to delete item
+function deleteItem(cartId) {
+    if (confirm('Are you sure you want to remove this item from your cart?')) {
+        // Set quantity to 0 to trigger removal
+        updateCartItem(cartId, 0);
+    }
+}
+
+// Function to save item for later
+function saveForLater(cartId) {
+    showLoading(true);
+    
+    fetch('${pageContext.request.contextPath}/cart/save-later', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify({
+            cartId: cartId
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        showLoading(false);
+        if (data.success) {
+            showNotification('Item saved for later!');
+            document.getElementById(`cart-item-${cartId}`).remove();
+            checkEmptyCart();
+        } else {
+            showNotification(data.message || 'Failed to save item', 'error');
+        }
+    })
+    .catch(error => {
+        showLoading(false);
+        showNotification('Network error', 'error');
+    });
+}
+
+// Function to check if cart is empty
+function checkEmptyCart() {
+    const cartItems = document.querySelectorAll('.cart-card');
+    const emptyCartDiv = document.querySelector('.empty-cart');
+    
+    if (cartItems.length === 0) {
+        // If empty cart message doesn't exist, create it
+        if (!emptyCartDiv) {
+            const leftCol = document.querySelector('.col-md-8');
+            const emptyCartHTML = `
+                <div class="empty-cart">
+                    <i class="fas fa-shopping-cart"></i>
+                    <h3 class="text-muted mb-3">Your cart is empty</h3>
+                    <p class="text-muted mb-4">Add some products to get started!</p>
+                    <a href="${pageContext.request.contextPath}/home" 
+                       class="btn btn-primary btn-lg">
+                        <i class="fas fa-shopping-bag me-2"></i>Continue Shopping
+                    </a>
+                </div>
+            `;
+            leftCol.innerHTML = emptyCartHTML;
+            
+            // Update checkout button
+            const checkoutBtn = document.querySelector('.btn-success');
+            if (checkoutBtn) {
+                checkoutBtn.classList.remove('btn-success');
+                checkoutBtn.classList.add('btn-secondary');
+                checkoutBtn.disabled = true;
+                checkoutBtn.innerHTML = '<i class="fas fa-lock me-2"></i>Proceed to Checkout';
+            }
+            
+            // Update grand total
+            document.getElementById('grand-total-display').textContent = '₹0';
+        }
+    }
+}
+
+// Initialize page
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Cart page loaded successfully');
+    
+    // Add input validation
+    const qtyInputs = document.querySelectorAll('.qty-input');
+    qtyInputs.forEach(input => {
+        input.addEventListener('blur', function() {
+            let value = parseInt(this.value);
+            if (isNaN(value) || value < 1) {
+                this.value = 1;
+            } else if (value > 99) {
+                this.value = 99;
+            }
+        });
+    });
+});
+</script>
+</body>
+</html>

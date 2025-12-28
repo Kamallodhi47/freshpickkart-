@@ -1,0 +1,1190 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Header</title>
+
+<!-- FontAwesome Icons -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<!-- Bootstrap CSS -->
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+
+<style>
+/* =================== GLOBAL RESET =================== */
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	-webkit-tap-highlight-color: transparent;
+}
+
+html {
+	font-size: 16px;
+}
+
+body {
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	overflow-x: hidden;
+}
+
+/* =================== MOBILE FIRST DESIGN =================== */
+
+/* =================== HEADER =================== */
+.main-header {
+	background: linear-gradient(135deg, #131921 0%, #232f3e 100%);
+	color: #fff;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 1000;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* =================== MOBILE HEADER CONTAINER =================== */
+.header-container {
+	display: grid;
+	grid-template-columns: auto 1fr auto;
+	align-items: center;
+	padding: 12px 15px;
+	gap: 12px;
+	width: 100%;
+	height: 60px;
+}
+
+/* =================== LOGO - MOBILE FIRST =================== */
+.logo-section {
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+}
+.header-container {
+    height: 70px;                 /* Header ki height */
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+ background: linear-gradient(135deg, #d0dbe7, #232f3e 100%);
+   }
+
+/* Logo Section */
+.logo-section {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+/* Logo Image Size */
+.logo-section img {
+    height: 209px;      /* Jitna bada logo chahiye */
+    width: auto;       /* Image proportion auto set rahega */
+    object-fit: contain;
+    
+}
+
+.logo {
+	font-size: 20px;
+	font-weight: 700;
+	color: #ff9900;
+	text-decoration: none;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	transition: all 0.3s ease;
+	padding: 4px 8px;
+	border-radius: 6px;
+	white-space: nowrap;
+	
+}
+
+.logo:hover {
+	color: #ffd700;
+	transform: scale(1.05);
+}
+
+.logo i {
+	font-size: 22px;
+}
+
+/* =================== SEARCH - MOBILE FIRST =================== */
+.search-section {
+	position: relative;
+	width: 100%;
+}
+
+.search-container {
+	display: flex;
+	width: 100%;
+	height: 40px;
+	border-radius: 20px;
+	overflow: hidden;
+	box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+	background: white;
+}
+
+.search-input {
+	flex: 1;
+	padding: 0 15px;
+	border: none;
+	outline: none;
+	font-size: 14px;
+	color: #333;
+	background: transparent;
+}
+
+.search-input::placeholder {
+	color: #888;
+	font-size: 13px;
+}
+
+.search-btn {
+	padding: 0 18px;
+	background: linear-gradient(135deg, #ff9900 0%, #ffac31 100%);
+	border: none;
+	color: white;
+	font-weight: 600;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 50px;
+	transition: all 0.3s ease;
+}
+
+.search-btn:hover {
+	background: linear-gradient(135deg, #ff8c00 0%, #ff9a00 100%);
+}
+
+.search-btn i {
+	font-size: 16px;
+}
+
+/* =================== ACTION BUTTONS - MOBILE FIRST =================== */
+.action-section {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	justify-content: flex-end;
+}
+
+.header-btn {
+	color: #fff;
+	text-decoration: none;
+	font-size: 12px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 2px;
+	position: relative;
+	cursor: pointer;
+	padding: 6px 8px;
+	border-radius: 8px;
+	transition: all 0.3s ease;
+	min-width: 44px;
+	min-height: 44px;
+	justify-content: center;
+}
+
+.header-btn i {
+	font-size: 18px;
+	margin-bottom: 2px;
+}
+
+.header-btn span:not(.cart-count) {
+	font-size: 10px;
+	font-weight: 500;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 60px;
+}
+
+.header-btn:hover {
+	background: rgba(255, 255, 255, 0.15);
+	transform: translateY(-2px);
+}
+
+/* CART COUNT - MOBILE FIRST */
+.cart-count {
+	background: linear-gradient(135deg, #ff4444 0%, #ff6b6b 100%);
+	color: white;
+	font-size: 10px;
+	font-weight: bold;
+	padding: 1px 5px;
+	border-radius: 50%;
+	position: absolute;
+	top: 2px;
+	right: 2px;
+	min-width: 16px;
+	height: 16px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* =================== ACCOUNT DROPDOWN - MOBILE FIRST =================== */
+.account-dropdown {
+	position: relative;
+}
+
+.manual-dropdown-menu {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 1100;
+	background-color: white;
+	border-radius: 16px;
+	width: 90%;
+	max-width: 320px;
+	box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+	display: none;
+	overflow: hidden;
+	animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+	from {
+		opacity: 0;
+		transform: translate(-50%, -40%);
+	}
+	to {
+		opacity: 1;
+		transform: translate(-50%, -50%);
+	}
+}
+
+.manual-dropdown-menu.show {
+	display: block !important;
+}
+
+.dropdown-item {
+	color: #333 !important;
+	padding: 14px 20px;
+	text-decoration: none;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	font-size: 15px;
+	border-bottom: 1px solid #f0f0f0;
+	transition: all 0.2s ease;
+}
+
+.dropdown-item:last-child {
+	border-bottom: none;
+}
+
+.dropdown-item:hover {
+	background-color: #f8f9fa;
+	padding-left: 25px;
+}
+
+.dropdown-item i {
+	width: 20px;
+	text-align: center;
+	color: #666;
+}
+
+.user-welcome {
+	padding: 18px 20px;
+	background: linear-gradient(135deg, #4a6cf7 0%, #6c63ff 100%);
+	color: white;
+	font-weight: 600;
+	font-size: 16px;
+	text-align: center;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dropdown-divider {
+	height: 1px;
+	background: #eee;
+	margin: 5px 0;
+}
+
+.text-danger {
+	color: #ff4444 !important;
+}
+
+.text-danger:hover {
+	color: #ff0000 !important;
+	background: rgba(255, 68, 68, 0.1);
+}
+
+/* =================== MOBILE NAVIGATION =================== */
+.main-nav {
+	background: linear-gradient(135deg, #232f3e 0%, #37475a 100%);
+	padding: 12px 0;
+	margin-top: 60px;
+	position: sticky;
+	top: 60px;
+	z-index: 999;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.nav-container {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 0 15px;
+	overflow-x: auto;
+	white-space: nowrap;
+	-webkit-overflow-scrolling: touch;
+	scrollbar-width: none;
+}
+
+.nav-container::-webkit-scrollbar {
+	display: none;
+}
+
+.nav-btn {
+	padding: 10px 14px;
+	border-radius: 25px;
+	font-size: 13px;
+	text-decoration: none;
+	color: #fff;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	transition: all 0.3s ease;
+	white-space: nowrap;
+	flex-shrink: 0;
+	background: rgba(255, 255, 255, 0.1);
+	backdrop-filter: blur(10px);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	min-height: 40px;
+}
+
+.nav-btn:hover {
+	background: rgba(255, 255, 255, 0.2);
+	transform: translateY(-2px);
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.nav-btn i {
+	font-size: 14px;
+}
+
+/* =================== CATEGORIES DROPDOWN - MOBILE FIRST =================== */
+.dropdown {
+	position: relative;
+	flex-shrink: 0;
+}
+
+.category-dropdown-menu {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 1100;
+	background-color: white;
+	border-radius: 16px;
+	width: 90%;
+	max-width: 320px;
+	max-height: 70vh;
+	box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+	display: none;
+	overflow-y: auto;
+	animation: slideUp 0.3s ease;
+}
+
+.category-dropdown-menu.show {
+	display: block !important;
+}
+
+.category-item {
+	color: #333 !important;
+	padding: 14px 20px;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	font-size: 15px;
+	border-bottom: 1px solid #f0f0f0;
+	transition: all 0.2s ease;
+}
+
+.category-item:hover {
+	background: #f8f9fa;
+	padding-left: 25px;
+}
+
+.category-item i {
+	color: #4a6cf7;
+	width: 20px;
+	text-align: center;
+}
+
+/* =================== MOBILE OVERLAY =================== */
+.dropdown-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.7);
+	z-index: 1099;
+	display: none;
+	backdrop-filter: blur(5px);
+	animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+	from { opacity: 0; }
+	to { opacity: 1; }
+}
+
+.dropdown-overlay.show {
+	display: block;
+}
+
+/* =================== MOBILE BOTTOM NAV (OPTIONAL) =================== */
+.mobile-bottom-nav {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	background: white;
+	display: none;
+	justify-content: space-around;
+	padding: 12px 0 8px;
+	box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+	z-index: 1000;
+	border-top: 1px solid #eee;
+	backdrop-filter: blur(10px);
+}
+
+.mobile-nav-item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-decoration: none;
+	color: #666;
+	font-size: 10px;
+	flex: 1;
+	padding: 4px 0;
+	transition: all 0.3s ease;
+}
+
+.mobile-nav-item i {
+	font-size: 18px;
+	margin-bottom: 4px;
+	color: #4a6cf7;
+}
+
+.mobile-nav-item.active {
+	color: #4a6cf7;
+	font-weight: 600;
+}
+
+.mobile-nav-item span {
+	font-size: 10px;
+}
+
+/* =================== TABLET OPTIMIZATIONS =================== */
+@media (min-width: 768px) {
+	html {
+		font-size: 17px;
+	}
+	
+	.header-container {
+		height: 70px;
+		padding: 15px 20px;
+		gap: 20px;
+	}
+	
+	
+	.logo {
+		font-size: 24px;
+	}
+	
+	.logo i {
+		font-size: 26px;
+	}
+	
+	.search-container {
+		height: 44px;
+	}
+	
+	.search-input {
+		font-size: 15px;
+		padding: 0 20px;
+	}
+	
+	.search-btn {
+		padding: 0 25px;
+		min-width: 60px;
+	}
+	
+	.action-section {
+		gap: 15px;
+	}
+	
+	.header-btn {
+		flex-direction: row;
+		gap: 6px;
+		padding: 8px 12px;
+		font-size: 14px;
+		min-width: auto;
+	}
+	
+	.header-btn i {
+		margin-bottom: 0;
+		font-size: 20px;
+	}
+	
+	.header-btn span:not(.cart-count) {
+		font-size: 13px;
+		max-width: none;
+	}
+	
+	.cart-count {
+		top: 5px;
+		right: 5px;
+		font-size: 11px;
+		min-width: 18px;
+		height: 18px;
+	}
+	
+	.main-nav {
+		margin-top: 70px;
+	}
+	
+	.nav-btn {
+		padding: 12px 18px;
+		font-size: 14px;
+		gap: 8px;
+	}
+	
+	.nav-btn i {
+		font-size: 16px;
+	}
+	
+	/* Hide mobile bottom nav on tablet */
+	.mobile-bottom-nav {
+		display: none !important;
+	}
+}
+
+/* =================== DESKTOP OPTIMIZATIONS =================== */
+@media (min-width: 992px) {
+	html {
+		font-size: 18px;
+	}
+	
+	.header-container {
+		height: 80px;
+		padding: 0 30px;
+		max-width: 1400px;
+		margin: 0 auto;
+	}
+	
+	.logo {
+		font-size: 28px;
+	}
+	
+	.logo i {
+		font-size: 30px;
+	}
+	
+	.search-container {
+		height: 48px;
+		max-width: 600px;
+		margin: 0 auto;
+	}
+	
+	.search-input {
+		font-size: 16px;
+	}
+	
+	.search-btn {
+		padding: 0 30px;
+		min-width: 70px;
+	}
+	
+	.action-section {
+		gap: 25px;
+	}
+	
+	.header-btn {
+		padding: 10px 16px;
+		font-size: 15px;
+		gap: 8px;
+	}
+	
+	.header-btn i {
+		font-size: 22px;
+	}
+	
+	.manual-dropdown-menu,
+	.category-dropdown-menu {
+		position: absolute;
+		top: 100%;
+		left: 0;
+		transform: none;
+		width: 280px;
+		max-width: 280px;
+		animation: slideDown 0.3s ease;
+	}
+	
+	@keyframes slideDown {
+		from {
+			opacity: 0;
+			transform: translateY(-10px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+	
+	.main-nav {
+		margin-top: 80px;
+		padding: 15px 0;
+	}
+	
+	.nav-container {
+		max-width: 1400px;
+		margin: 0 auto;
+		padding: 0 30px;
+		justify-content: flex-start;
+		gap: 15px;
+		overflow-x: visible;
+	}
+	
+	.nav-btn {
+		padding: 12px 20px;
+		font-size: 15px;
+		gap: 10px;
+	}
+	
+	.dropdown-overlay {
+		display: none !important;
+	}
+}
+
+/* =================== LARGE DESKTOP =================== */
+@media (min-width: 1200px) {
+	.header-container {
+		max-width: 1600px;
+	}
+	
+	.nav-container {
+		max-width: 1600px;
+	}
+	
+	.search-container {
+		max-width: 700px;
+	}
+}
+
+/* =================== UTILITY CLASSES =================== */
+.text-danger {
+	color: #ff4444 !important;
+}
+
+.text-center {
+	text-align: center;
+}
+
+.d-none {
+	display: none !important;
+}
+
+/* =================== TOUCH OPTIMIZATIONS =================== */
+@media (hover: none) and (pointer: coarse) {
+	.header-btn:hover,
+	.nav-btn:hover,
+	.dropdown-item:hover,
+	.category-item:hover {
+		transform: none;
+		background: none;
+	}
+	
+	.header-btn:active,
+	.nav-btn:active {
+		background: rgba(255, 255, 255, 0.2);
+		transform: scale(0.95);
+	}
+}
+
+/* =================== DARK MODE SUPPORT =================== */
+@media (prefers-color-scheme: dark) {
+	.manual-dropdown-menu,
+	.category-dropdown-menu {
+		background-color: #1e1e1e;
+		border: 1px solid #333;
+	}
+	
+	.dropdown-item,
+	.category-item {
+		color: #e0e0e0 !important;
+		border-bottom-color: #333;
+	}
+	
+	.dropdown-item:hover,
+	.category-item:hover {
+		background-color: #2a2a2a;
+	}
+	
+	.user-welcome {
+		background: linear-gradient(135deg, #3a5ce5 0%, #5b52e6 100%);
+	}
+	
+	.text-danger {
+		color: #ff6b6b !important;
+	}
+}
+</style>
+</head>
+
+<body>
+
+	<!-- Header - MOBILE FIRST DESIGN -->
+	<header class="main-header">
+		<div class="header-container">
+			<!-- Logo Section - LEFT -->
+			<div class="logo-section">
+			<img src="<%=request.getContextPath()%>/assets/img/Seller_img/fressss.png" alt="logo">
+			 <p class="brand-name"></p>
+				<%-- <a href="${pageContext.request.contextPath}/User/src/main/webapp/assets/img/Seller_img/logoaa (2).png" class="logo"> --%> 
+					<!-- <i class="fas fa-leaf"> </i>  -->
+					<span class="logo-text"></span>
+				</a>
+			</div>
+
+			<!-- Search Section - CENTER -->
+			<div class="search-section">
+				<div class="search-container">
+					<input type="text" class="search-input"
+						placeholder="Search products..." id="searchInput">
+					<button class="search-btn" id="searchButton">
+						<i class="fas fa-search"></i>
+					</button>
+				</div>
+			</div>
+
+			<!-- Action Buttons - RIGHT -->
+			<div class="action-section">
+				<!-- Account Dropdown -->
+				<div class="account-dropdown">
+					<c:choose>
+						<c:when test="${not empty sessionScope.user}">
+							<!-- LOGGED IN USER -->
+							<a class="header-btn" href="javascript:void(0)"
+								onclick="toggleDropdown('userMenu')" id="accountButton"> 
+								<i class="fas fa-user-circle"></i> 
+								<span class="btn-text">${fn:substringBefore(sessionScope.user.name, ' ')}</span>
+							</a>
+
+							<div class="manual-dropdown-menu" id="userMenu">
+								<div class="user-welcome">Hello, ${sessionScope.user.name}!</div>
+								<a class="dropdown-item"
+									href="${pageContext.request.contextPath}/profile"> 
+									<i class="fas fa-user"></i> My Profile 
+								</a> 
+								<a class="dropdown-item"
+									href="${pageContext.request.contextPath}/orders"> 
+									<i class="fas fa-shopping-bag"></i> My Orders
+								</a> 
+								<a class="dropdown-item"
+									href="${pageContext.request.contextPath}/wishlist"> 
+									<i class="fas fa-heart"></i> Wishlist
+								</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item text-danger"
+									href="${pageContext.request.contextPath}/logout"> 
+									<i class="fas fa-sign-out-alt"></i> Logout
+								</a>
+							</div>
+						</c:when>
+						<c:otherwise>
+							<!-- GUEST USER -->
+							<a class="header-btn" href="javascript:void(0)"
+								onclick="toggleDropdown('guestMenu')" id="accountButton"> 
+								<i class="fas fa-user"></i> 
+								<span class="btn-text">Account</span>
+							</a>
+
+							<div class="manual-dropdown-menu" id="guestMenu">
+								<a class="dropdown-item"
+									href="${pageContext.request.contextPath}/Login"> 
+									<i class="fas fa-sign-in-alt"></i> Login
+								</a> 
+								<a class="dropdown-item"
+									href="${pageContext.request.contextPath}/register"> 
+									<i class="fas fa-user-plus"></i> Register
+								</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item"
+									href="${pageContext.request.contextPath}/service"> 
+									<i class="fas fa-headset"></i> Customer Service
+								</a>
+							</div>
+						</c:otherwise>
+					</c:choose>
+				</div>
+
+				<!-- Wishlist -->
+				<a href="${pageContext.request.contextPath}/wishlist" class="header-btn" id="wishlistButton"> 
+					<i class="fas fa-heart"></i> 
+					<span class="btn-text">Wishlist</span>
+				</a>
+
+				<!-- Cart -->
+				<a href="${pageContext.request.contextPath}/cart" class="header-btn" id="cartButton">
+					<i class="fas fa-shopping-cart"></i> 
+					<span class="btn-text">Cart</span> 
+					<span class="cart-count" id="cartCount"> 
+						<c:choose>
+							<c:when test="${not empty sessionScope.cartCount && sessionScope.cartCount > 0}">
+                            	${sessionScope.cartCount}
+                        	</c:when>
+							<c:otherwise>0</c:otherwise>
+						</c:choose>
+					</span>
+				</a>
+			</div>
+		</div>
+	</header>
+
+	<!-- Navigation -->
+	<nav class="main-nav">
+		<div class="nav-container">
+			<!-- Categories Dropdown -->
+			<div class="dropdown">
+				<button class="nav-btn dropdown-toggle" type="button"
+					onclick="toggleDropdown('categoryMenu')" id="categoryButton">
+					<i class="fas fa-bars"></i> 
+					<span class="btn-text">Categories</span>
+				</button>
+
+				<ul class="category-dropdown-menu" id="categoryMenu">
+					<c:forEach var="c" items="${categories}">
+						<li><a class="dropdown-item category-item"
+							href="${pageContext.request.contextPath}/products?categories=${c.name}"> 
+							<i class="fa-solid fa-tag"></i> ${c.name}
+						</a></li>
+					</c:forEach>
+				</ul>
+			</div>
+              <a href="${pageContext.request.contextPath}/" class="nav-btn" id="offersButton">
+				<i class="fas fa-tags"></i> 
+				<span class="btn-text">Home</span>
+			   </a> 
+			<!-- Products -->
+			<a href="${pageContext.request.contextPath}/products" class="nav-btn" id="productsButton">
+				<i class="fas fa-store"></i> 
+				<span class="btn-text">Products</span>
+			</a> 
+			
+			<!-- Offers -->
+			<a href="${pageContext.request.contextPath}/offers" class="nav-btn" id="offersButton">
+				<i class="fas fa-tags"></i> 
+				<span class="btn-text">Offers</span>
+			</a> 
+			
+			<!-- Customer Service -->
+			<a href="${pageContext.request.contextPath}/service" class="nav-btn" id="serviceButton"> 
+				<i class="fas fa-headset"></i> 
+				<span class="btn-text">Service</span>
+			</a>
+			<%-- <a href="${pageContext.request.contextPath}" class="nav-btn" id="offersButton">
+				<i class="fas fa-tags"></i> 
+				<span class="btn-text">Blog</span>
+			   </a> 
+			<a href="${pageContext.request.contextPath}" class="nav-btn" id="offersButton">
+				<i class="fas fa-tags"></i> 
+				<span class="btn-text">More</span>
+			</a>  --%>
+			
+		</div>
+	</nav>
+
+	<!-- Mobile Bottom Navigation (Only for small screens) -->
+	<nav class="mobile-bottom-nav" id="mobileBottomNav">
+		<a href="${pageContext.request.contextPath}/" class="mobile-nav-item active">
+			<i class="fas fa-home"></i>
+			<span>Home</span>
+		</a>
+		<a href="${pageContext.request.contextPath}/categories" class="mobile-nav-item">
+			<i class="fas fa-th-large"></i>
+			<span>Categories</span>
+		</a>
+		<a href="${pageContext.request.contextPath}/cart" class="mobile-nav-item">
+			<i class="fas fa-shopping-cart"></i>
+			<span>Cart</span>
+		</a>
+		<a href="${pageContext.request.contextPath}/account" class="mobile-nav-item">
+			<i class="fas fa-user"></i>
+			<span>Account</span>
+		</a>
+	</nav>
+
+	<!-- Dropdown Overlay for Mobile -->
+	<div class="dropdown-overlay" id="dropdownOverlay"
+		onclick="closeAllDropdowns()"></div>
+
+	<script>
+// ================= MOBILE DETECTION =================
+const isMobile = () => {
+    return window.innerWidth <= 768 || 
+           /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+};
+
+// ================= DROPDOWN MANAGEMENT =================
+let currentDropdown = null;
+
+function toggleDropdown(menuId) {
+    const menu = document.getElementById(menuId);
+    const overlay = document.getElementById('dropdownOverlay');
+    
+    if (!menu) return;
+    
+    if (currentDropdown === menuId) {
+        closeDropdown();
+    } else {
+        closeDropdown();
+        currentDropdown = menuId;
+        menu.classList.add('show');
+        
+        // Mobile specific behavior
+        if (isMobile()) {
+            if (overlay) overlay.classList.add('show');
+            document.body.style.overflow = 'hidden';
+            
+            // Add touch feedback
+            if (menuId === 'userMenu' || menuId === 'guestMenu') {
+                const accountBtn = document.getElementById('accountButton');
+                if (accountBtn) {
+                    accountBtn.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        accountBtn.style.transform = '';
+                    }, 200);
+                }
+            }
+        }
+    }
+}
+
+function closeDropdown() {
+    if (currentDropdown) {
+        const menu = document.getElementById(currentDropdown);
+        const overlay = document.getElementById('dropdownOverlay');
+        
+        if (menu) menu.classList.remove('show');
+        if (overlay) overlay.classList.remove('show');
+        
+        document.body.style.overflow = '';
+        currentDropdown = null;
+    }
+}
+
+function closeAllDropdowns() {
+    document.querySelectorAll('.manual-dropdown-menu, .category-dropdown-menu').forEach(function(menu) {
+        menu.classList.remove('show');
+    });
+    const overlay = document.getElementById('dropdownOverlay');
+    if (overlay) overlay.classList.remove('show');
+    document.body.style.overflow = '';
+    currentDropdown = null;
+}
+
+// ================= SEARCH FUNCTIONALITY =================
+const searchInput = document.getElementById('searchInput');
+const searchButton = document.getElementById('searchButton');
+
+function performSearch() {
+    const searchTerm = searchInput.value.trim();
+    if (searchTerm) {
+        window.location.href = '${pageContext.request.contextPath}/products?search=' + encodeURIComponent(searchTerm);
+    } else {
+        // Mobile feedback for empty search
+        if (isMobile()) {
+            searchInput.style.border = '2px solid #ff4444';
+            setTimeout(() => {
+                searchInput.style.border = '';
+            }, 300);
+        }
+    }
+}
+
+searchButton.addEventListener('click', performSearch);
+
+searchInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        performSearch();
+    }
+});
+
+// Mobile search enhancement
+if (isMobile()) {
+    searchInput.addEventListener('focus', function() {
+        this.parentElement.style.boxShadow = '0 5px 20px rgba(255, 153, 0, 0.3)';
+    });
+    
+    searchInput.addEventListener('blur', function() {
+        this.parentElement.style.boxShadow = '0 3px 8px rgba(0, 0, 0, 0.2)';
+    });
+}
+
+// ================= CART FUNCTIONALITY =================
+function updateCartCount(count) {
+    const cartCountElement = document.getElementById('cartCount');
+    if (cartCountElement) {
+        cartCountElement.textContent = count;
+        
+        // Mobile animation
+        if (isMobile()) {
+            cartCountElement.style.transform = 'scale(1.5)';
+            cartCountElement.style.background = 'linear-gradient(135deg, #ff0000 0%, #ff6b6b 100%)';
+            
+            // Vibrate on mobile
+            if (navigator.vibrate) {
+                navigator.vibrate(50);
+            }
+            
+            setTimeout(() => {
+                cartCountElement.style.transform = 'scale(1)';
+                cartCountElement.style.background = 'linear-gradient(135deg, #ff4444 0%, #ff6b6b 100%)';
+            }, 300);
+        }
+    }
+}
+
+// ================= MOBILE TOUCH OPTIMIZATIONS =================
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileBottomNav = document.getElementById('mobileBottomNav');
+    
+    // Show/hide mobile bottom nav based on screen size
+    function checkScreenSize() {
+        if (window.innerWidth <= 480) {
+            if (mobileBottomNav) mobileBottomNav.style.display = 'flex';
+            document.body.style.paddingBottom = '60px';
+        } else {
+            if (mobileBottomNav) mobileBottomNav.style.display = 'none';
+            document.body.style.paddingBottom = '';
+        }
+    }
+    
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+    
+    // Add touch feedback to all buttons
+    const touchElements = document.querySelectorAll('.header-btn, .nav-btn, .mobile-nav-item');
+    touchElements.forEach(el => {
+        el.addEventListener('touchstart', function() {
+            this.style.opacity = '0.8';
+            this.style.transform = 'scale(0.95)';
+        });
+        
+        el.addEventListener('touchend', function() {
+            this.style.opacity = '';
+            this.style.transform = '';
+        });
+    });
+    
+    // Close dropdown when clicking outside (desktop only)
+    if (!isMobile()) {
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.account-dropdown') && 
+                !event.target.closest('.dropdown') &&
+                !event.target.closest('.manual-dropdown-menu') &&
+                !event.target.closest('.category-dropdown-menu')) {
+                closeAllDropdowns();
+            }
+        });
+    }
+    
+    // Close dropdown on escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            closeAllDropdowns();
+        }
+    });
+    
+    // Prevent zoom on double tap (mobile)
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', function(event) {
+        const now = Date.now();
+        if (now - lastTouchEnd <= 300) {
+            event.preventDefault();
+        }
+        lastTouchEnd = now;
+    }, false);
+    
+    // Mobile scroll to top
+    const logo = document.querySelector('.logo');
+    if (logo && isMobile()) {
+        logo.addEventListener('click', function(e) {
+            if (window.location.pathname === '/') {
+                e.preventDefault();
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    }
+});
+
+// ================= WINDOW RESIZE HANDLER =================
+let resizeTimeout;
+window.addEventListener('resize', function() {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(function() {
+        // Close dropdowns when switching from mobile to desktop
+        if (!isMobile()) {
+            closeAllDropdowns();
+        }
+        
+        // Update mobile bottom nav
+        const mobileBottomNav = document.getElementById('mobileBottomNav');
+        if (window.innerWidth <= 480) {
+            if (mobileBottomNav) mobileBottomNav.style.display = 'flex';
+            document.body.style.paddingBottom = '60px';
+        } else {
+            if (mobileBottomNav) mobileBottomNav.style.display = 'none';
+            document.body.style.paddingBottom = '';
+        }
+    }, 150);
+});
+
+// ================= MOBILE PERFORMANCE OPTIMIZATIONS =================
+if (isMobile()) {
+    // Use passive listeners for better scroll performance
+    document.addEventListener('touchmove', function() {}, { passive: true });
+    
+    // Optimize animations
+    document.documentElement.style.setProperty('--scroll-behavior', 'auto');
+}
+
+// ================= INITIALIZE =================
+closeAllDropdowns();
+
+// Expose functions for other pages
+window.mobileUtils = {
+    updateCartCount: updateCartCount,
+    isMobile: isMobile
+};
+</script>
+
+	<!-- Bootstrap JS -->
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

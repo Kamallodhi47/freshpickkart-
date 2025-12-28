@@ -1,0 +1,664 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreshBasket - Online Grocery Store</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #84c225;
+            --primary-dark: #73a71e;
+            --secondary-color: #ff6b6b;
+            --light-bg: #f8f9fa;
+            --dark-color: #2c3e50;
+            --text-color: #333;
+            --text-light: #6c757d;
+            --shadow: 0 2px 5px rgba(0,0,0,0.1);
+            --card-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+        }
+
+        .search-bar {
+            flex-grow: 1;
+            margin: 0 20px;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 12px 20px;
+            border-radius: 4px;
+            border: none;
+            font-size: 16px;
+            padding-left: 45px;
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        .action-item {
+            margin-left: 20px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        .action-item i {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .cart-count {
+            background-color: var(--secondary-color);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            position: absolute;
+            top: -5px;
+            right: -5px;
+        }
+
+        .cart-container {
+            position: relative;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 20px;
+            overflow-x: auto;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 5px 10px;
+            border-radius: 4px;
+            min-width: 80px;
+        }
+
+        .nav-item:hover {
+            background-color: #f0f5e1;
+        }
+
+        .nav-item i {
+            font-size: 24px;
+            margin-bottom: 5px;
+            color: var(--primary-color);
+        }
+
+        .nav-item span {
+            font-size: 14px;
+            text-align: center;
+        }
+
+        /* Main Banner */
+        .banner {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .banner-content {
+            max-width: 800px;
+            padding: 0 20px;
+        }
+
+        .banner h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .banner p {
+            font-size: 20px;
+            margin-bottom: 30px;
+        }
+
+        .cta-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .cta-button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* Categories Section */
+        .section-title {
+            font-size: 24px;
+            margin: 30px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-color);
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 20px;
+        }
+
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto 40px;
+            padding: 0 20px;
+        }
+
+        .category-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .category-img {
+            height: 150px;
+            background-color: #f0f5e1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .category-img img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .category-name {
+            padding: 15px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        /* Products Section */
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto 40px;
+            padding: 0 20px;
+        }
+
+        .product-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-img {
+            height: 180px;
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .product-img img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .product-info {
+            padding: 15px;
+        }
+
+        .product-name {
+            font-weight: 600;
+            margin-bottom: 10px;
+            height: 40px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .product-price {
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .add-to-cart {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-weight: 600;
+        }
+
+        .add-to-cart:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: 50px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            padding: 0 20px;
+        }
+
+        .footer-column h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 40px;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+
+        .footer-column ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column ul li a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-column ul li a:hover {
+            color: var(--primary-color);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            color: white;
+            font-size: 20px;
+            transition: color 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: var(--primary-color);
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #34495e;
+            color: #bdc3c7;
+            font-size: 14px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-wrap: wrap;
+            }
+            
+            .logo {
+                margin-bottom: 10px;
+            }
+            
+            .search-bar {
+                order: 3;
+                margin: 10px 0 0;
+                width: 100%;
+            }
+            
+            .banner h1 {
+                font-size: 36px;
+            }
+            
+            .banner p {
+                font-size: 18px;
+            }
+            
+            .categories {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            
+            .products {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .banner {
+                height: 300px;
+            }
+            
+            .banner h1 {
+                font-size: 28px;
+            }
+            
+            .banner p {
+                font-size: 16px;
+            }
+            
+            .categories {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .products {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .footer-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <i class="fas fa-shopping-basket"></i>
+                FreshBasket
+            </div>
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search for products...">
+            </div>
+            <div class="user-actions">
+                <div class="action-item">
+                    <i class="fas fa-user"></i>
+                    <span>Login</span>
+                </div>
+                <div class="action-item cart-container">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Cart</span>
+                    <div class="cart-count">3</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="nav-item">
+                <i class="fas fa-apple-alt"></i>
+                <span>Fruits & Vegetables</span>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-wine-bottle"></i>
+                <span>Beverages</span>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-egg"></i>
+                <span>Dairy & Eggs</span>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-bread-slice"></i>
+                <span>Bakery</span>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-utensils"></i>
+                <span>Snacks</span>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-mortar-pestle"></i>
+                <span>Masala & Oil</span>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-ice-cream"></i>
+                <span>Frozen Food</span>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-paw"></i>
+                <span>Pet Care</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Banner -->
+    <section class="banner">
+        <div class="banner-content">
+            <h1>Fresh Groceries Delivered to Your Door</h1>
+            <p>Get the best quality fruits, vegetables, and daily essentials at your doorstep</p>
+            <button class="cta-button">Shop Now</button>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <h2 class="section-title">Shop by Category</h2>
+    <div class="categories">
+        <c:forEach var="c" items="${categories}" varStatus="loop">
+            <div class="category-card">
+                <div class="category-img">
+                    <img src="${pageContext.request.contextPath}/assets/img/category_img/${c.imageName}" 
+                         alt="${c.name}" 
+                         onerror="this.src='https://via.placeholder.com/150x150/f0f5e1/84c225?text=Category'">
+                </div>
+                <div class="category-name">${c.name}</div>
+            </div>
+        </c:forEach>
+    </div>
+
+    <!-- Products Section -->
+    <h2 class="section-title">Daily Essentials</h2>
+    <div class="products">
+        <c:forEach var="p" items="${products}" varStatus="loop">
+            <div class="product-card">
+                <div class="product-img">
+                    <img src="${pageContext.request.contextPath}/assets/img/product_img/${p.image}" 
+                         alt="${p.title}"
+                         onerror="this.src='https://via.placeholder.com/200x200/f8f9fa/84c225?text=Product'">
+                </div>
+                <div class="product-info">
+                    <div class="product-name">${p.title}</div>
+                    <div class="product-price">₹${p.price}</div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+        </c:forEach>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-column">
+                <h3>FreshBasket</h3>
+                <p>Your one-stop solution for all grocery needs. We deliver fresh and quality products right to your doorstep.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Terms & Conditions</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Categories</h3>
+                <ul>
+                    <li><a href="#">Fruits & Vegetables</a></li>
+                    <li><a href="#">Dairy & Eggs</a></li>
+                    <li><a href="#">Beverages</a></li>
+                    <li><a href="#">Snacks</a></li>
+                    <li><a href="#">Home Care</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Contact Info</h3>
+                <ul>
+                    <li><i class="fas fa-map-marker-alt"></i> 123 Grocery Street, City</li>
+                    <li><i class="fas fa-phone"></i> +91 98765 43210</li>
+                    <li><i class="fas fa-envelope"></i> support@freshbasket.com</li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2023 FreshBasket. All rights reserved.
+        </div>
+    </footer>
+
+    <!-- Bootstrap & Popper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script>
+        // Simple cart functionality
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', function() {
+                const productName = this.parentElement.querySelector('.product-name').textContent;
+                alert(`${productName} added to cart!`);
+                
+                // Update cart count
+                const cartCount = document.querySelector('.cart-count');
+                cartCount.textContent = parseInt(cartCount.textContent) + 1;
+            });
+        });
+        
+        // Search functionality
+        document.querySelector('.search-bar input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                alert(`Searching for: ${this.value}`);
+            }
+        });
+    </script>
+</body>
+</html>

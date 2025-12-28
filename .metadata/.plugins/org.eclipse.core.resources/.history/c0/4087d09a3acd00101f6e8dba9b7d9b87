@@ -1,0 +1,127 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<!-- Header -->
+<header class="bg-dark text-white py-2 sticky-top shadow-sm">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap">
+
+        <!-- Logo -->
+        <a href="${pageContext.request.contextPath}/" class="d-flex align-items-center logo me-3">
+            <img src="${pageContext.request.contextPath}/assets/img/download.png"
+                 alt="FreshMart Logo" style="height:50px;">
+            <span class="ms-2 fw-bold fs-4 text-white">FreshMart</span>
+        </a>
+
+        <!-- Search Bar -->
+        <form class="flex-grow-1 d-flex me-3">
+            <input type="text" class="form-control rounded-start" placeholder="Search for products, brands and more">
+            <button type="submit" class="btn btn-warning rounded-end"><i class="fas fa-search"></i></button>
+        </form>
+
+        <!-- Right Icons -->
+        <div class="d-flex align-items-center flex-wrap gap-2">
+
+            <!-- Account Dropdown -->
+            <c:if test="${empty sessionScope.user}">
+                <div class="dropdown">
+                    <a class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown">
+                        <i class="fas fa-user"></i> Account
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/Login">Login</a></li>
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/register">Register</a></li>
+                    </ul>
+                </div>
+            </c:if>
+
+            <c:if test="${not empty sessionScope.user}">
+                <div class="dropdown">
+                    <a class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown">
+                        <i class="fas fa-user"></i> ${sessionScope.user.name}
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/profile">My Profile</a></li>
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/logout">Logout</a></li>
+                    </ul>
+                </div>
+            </c:if>
+
+            <!-- Wishlist -->
+            <a href="${pageContext.request.contextPath}/wishlist" class="btn btn-dark position-relative">
+                <i class="fas fa-heart"></i>
+            </a>
+
+            <!-- Cart -->
+            <a href="${pageContext.request.contextPath}/cart" class="btn btn-dark position-relative">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark">
+                    3
+                </span>
+            </a>
+
+        </div>
+    </div>
+</header>
+
+<!-- Categories Nav -->
+<nav class="bg-secondary py-2">
+    <div class="container-fluid">
+        <div class="d-flex overflow-auto gap-2">
+            <div class="dropdown">
+                <a class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown">
+                    <i class="fas fa-bars"></i> All Categories
+                </a>
+                <ul class="dropdown-menu">
+                    <c:forEach var="c" items="${categories}">
+                        <li>
+                            <a class="dropdown-item" href="${pageContext.request.contextPath}/products?categories=${c.name}">
+                                <i class="fa-solid fa-tag"></i> ${c.name}
+                            </a>
+                        </li>
+                    </c:forEach>
+                </ul>
+            </div>
+
+            <!-- Other Nav Links -->
+            <a href="${pageContext.request.contextPath}/products" class="btn btn-dark">Products</a>
+            <a href="${pageContext.request.contextPath}/offers" class="btn btn-dark">Offers</a>
+            <a href="${pageContext.request.contextPath}/customer-service" class="btn btn-dark">Customer Service</a>
+            <a href="${pageContext.request.contextPath}/blog" class="btn btn-dark">Blog</a>
+        </div>
+    </div>
+</nav>
+
+<!-- CSS -->
+<style>
+/* Scrollable categories */
+nav .d-flex.overflow-auto {
+    -webkit-overflow-scrolling: touch;
+}
+
+nav .btn {
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.logo img {
+    object-fit: contain;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+    .logo span {
+        display: none;
+    }
+
+    form.flex-grow-1 {
+        width: 100%;
+        margin-top: 8px;
+        margin-bottom: 8px;
+    }
+
+    header .d-flex.align-items-center.flex-wrap {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+}
+</style>
